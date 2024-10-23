@@ -1,0 +1,7 @@
+# openai - GPT
+openai
+# huggingface - Qwen
+transformers
+jinja2
+torch
+accelerate
