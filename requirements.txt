@@ -1,7 +1,7 @@
 # openai - GPT
 openai
-# huggingface - Qwen
-transformers
-jinja2
-torch
-accelerate
+# huggingface - Qwen - not used currently
+# transformers
+# jinja2
+# torch
+# accelerate
