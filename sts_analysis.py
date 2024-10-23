@@ -108,33 +108,7 @@ def run_bundle_ask_job(chat, cards_df, card_count, next_card_number):
     return zip(prompts, results, ids)
 
 if __name__=="__main__":
-    # game playing maybe?
-    # game reviewer?
-    # combos instead of synergies?
-    # does it understand "informal probability reasoning"? look at existing papers
-    # QA dataset?
     system_prompt, prompts, responses, next_card_number = get_sts_prompts(ask_type=AskType.NP_Bundle, shot_count=None)
-    # around 5000 tokens per card synergy (AskType.Negative_or_Positive)
-    # examples for 3 cards, AskType.Negative_or_Positive, combo
-    # CompletionUsage(completion_tokens=218, prompt_tokens=4482, total_tokens=4700, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0), prompt_tokens_details={'cached_tokens': 4224})
-    # CompletionUsage(completion_tokens=221, prompt_tokens=4477, total_tokens=4698, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0), prompt_tokens_details={'cached_tokens': 4224})
-    # CompletionUsage(completion_tokens=231, prompt_tokens=4482, total_tokens=4713, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0), prompt_tokens_details={'cached_tokens': 4224})
-    # CompletionUsage(completion_tokens=304, prompt_tokens=4483, total_tokens=4787, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0), prompt_tokens_details={'cached_tokens': 4224})
-    # CompletionUsage(completion_tokens=322, prompt_tokens=4483, total_tokens=4805, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0), prompt_tokens_details={'cached_tokens': 4224})
-    # CompletionUsage(completion_tokens=342, prompt_tokens=4483, total_tokens=4825, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0), prompt_tokens_details={'cached_tokens': 0})
-    # CompletionUsage(completion_tokens=341, prompt_tokens=4483, total_tokens=4824, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0), prompt_tokens_details={'cached_tokens': 4224})
-    # CompletionUsage(completion_tokens=396, prompt_tokens=4488, total_tokens=4884, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0), prompt_tokens_details={'cached_tokens': 4224})
-    # CompletionUsage(completion_tokens=262, prompt_tokens=4477, total_tokens=4739, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0), prompt_tokens_details={'cached_tokens': 0})
-    # example for 2x2, 3 cards, positive or negative, combo
-    # CompletionUsage(completion_tokens=240, prompt_tokens=4461, total_tokens=4701, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0), prompt_tokens_details={'cached_tokens': 4224})
-    # CompletionUsage(completion_tokens=327, prompt_tokens=4480, total_tokens=4807, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0), prompt_tokens_details={'cached_tokens': 4224})
-    # CompletionUsage(completion_tokens=386, prompt_tokens=4480, total_tokens=4866, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0), prompt_tokens_details={'cached_tokens': 4224})
-    # CompletionUsage(completion_tokens=327, prompt_tokens=4467, total_tokens=4794, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0), prompt_tokens_details={'cached_tokens': 4224})
-    # CompletionUsage(completion_tokens=249, prompt_tokens=4853, total_tokens=5102, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0), prompt_tokens_details={'cached_tokens': 4608})
-    # CompletionUsage(completion_tokens=234, prompt_tokens=4912, total_tokens=5146, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0, text_tokens=0, audio_tokens=0), prompt_tokens_details={'cached_tokens': 4224})    
-    # CompletionUsage(completion_tokens=286, prompt_tokens=4840, total_tokens=5126, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0), prompt_tokens_details={'cached_tokens': 4224})
-    # CompletionUsage(completion_tokens=290, prompt_tokens=5150, total_tokens=5440, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0), prompt_tokens_details={'cached_tokens': 4992})
-    # CompletionUsage(completion_tokens=220, prompt_tokens=5468, total_tokens=5688, completion_tokens_details=CompletionTokensDetails(reasoning_tokens=0), prompt_tokens_details={'cached_tokens': 5248})
     chat = OpenAIChat(OpenAIChat.OpenAIModel.GPT_4O_mini, chat_format=False, system_message=system_prompt)
     for prompt, response in zip(prompts, responses):
         chat.inject(prompt, response)
