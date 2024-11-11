@@ -2,3 +2,7 @@
 results/*
 *.zip
 *.jsonl
+TODO
+auth.py
+*.csv
+__pycache__

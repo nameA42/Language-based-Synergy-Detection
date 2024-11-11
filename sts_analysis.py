@@ -3,24 +3,28 @@ from joblib import delayed, Parallel
 from tqdm import tqdm
 from sts_prompts import get_sts_prompts, get_single_card_ask, get_multi_card_multi_ask, get_multi_card_bundle_ask, AskType
 from utility import TextUtil
+from subset import subrows
 
 thread_count = 50
+SHOULD_SUBSET = False
+RETRY_COUNT = 3
 
 class IncorrectResponseLengthException(Exception):
     def __init__(self, length, expected_length, response):
         super().__init__(f"Incorrecnt length of {length}, expected {expected_length}, for {response[:100] + ' ... ' + response[-100:]}")
 
 def ask_until_format_is_right(chat, prompt, bundle_size:None|int=None):
-    # mock answer
-    # result = ('4\n---NEXT---\n' * (bundle_size-1) + '4\n') if bundle_size is not None else '4\n'
+    # mock answer (NaN)
+    # return ('NaN\n---NEXT---\n' * (bundle_size-1) + 'NaN\n') if bundle_size is not None else 'NaN\n'
+    # mock answer (4)
+    # return ('4\n---NEXT---\n' * (bundle_size-1) + '4\n') if bundle_size is not None else '4\n'
     result = chat.ask(prompt)
-    for i in range(3):
+    for i in range(RETRY_COUNT):
         try:
             if bundle_size is not None:
                 vals = [float(r.split()[-1] if len(r) > 0 else r) for r in result.split('---NEXT---')]
                 if len(vals) != bundle_size:
                     raise IncorrectResponseLengthException(len(vals), bundle_size, result)
-                    # raise IncorrectResponseLengthException()
             else:
                 val = float(result.split()[-1])
             break
@@ -29,11 +33,9 @@ def ask_until_format_is_right(chat, prompt, bundle_size:None|int=None):
             print(result)
             print(f"Exception: {e}")
             if i == 2:
-                result = f'invalid response {i+1} times\n[latest] {result}\n1000000\n' * (1 if bundle_size is None else bundle_size)
-                result += f'---NEXT---\n1000000\n' * (0 if bundle_size is None else (bundle_size - 1))
+                result = f'invalid response {i+1} times\n[latest] {result}\nNaN\n' * (1 if bundle_size is None else bundle_size)
+                result += f'---NEXT---\nNaN\n' * (0 if bundle_size is None else (bundle_size - 1))
             else:
-                # mock answer
-                # result = ('4\n---NEXT---\n' * (bundle_size-1) + '4\n') if bundle_size is not None else '4\n'
                 result = chat.ask(prompt)
     return result
 
@@ -42,6 +44,7 @@ def get_request_and_response(chat, card1, card2, id1, id2, starting_card_number)
         result = ask_until_format_is_right(chat, prompt)
         return prompt, result, id
     
+# TODO change the type to LLMConnector instead of OpenAIChat
 def get_multi_request_and_response(chat: OpenAIChat, x_cards, y_cards, x_indices, y_indices, starting_card_number):
     prompts, ids = get_multi_card_multi_ask(x_cards, y_cards, x_indices, y_indices, starting_card_number)
     results = []
@@ -52,7 +55,7 @@ def get_multi_request_and_response(chat: OpenAIChat, x_cards, y_cards, x_indices
         results.append(result)
     return prompts, results, ids
 
-def get_bundle_request_and_response(chat: OpenAIChat, x_cards, y_cards, x_indices, y_indices, starting_card_number):
+def get_bundle_request_and_response(chat: LLMConnector, x_cards, y_cards, x_indices, y_indices, starting_card_number):
     prompt, ids = get_multi_card_bundle_ask(x_cards, y_cards, x_indices, y_indices, starting_card_number)
     # print(TextUtil.get_colored_text(f"{x_indices} x {y_indices}\n", TextUtil.TEXT_COLOR.Red))
     # print(TextUtil.get_colored_text(prompt, TextUtil.TEXT_COLOR.Yellow))
@@ -68,6 +71,8 @@ def log(prompt, response, output_filename, tag=""):
 
 def run_single_ask_job(chat, cards_df, next_card_number):
     queries = [(row1, row2, index1, index2) for index1, row1 in cards_df.iterrows() for index2, row2 in cards_df.iterrows()]
+    if SHOULD_SUBSET:
+        queries = [query for query in queries if query[2] in subrows and query[3] in subrows]
     req_responses = Parallel(n_jobs=thread_count)(delayed(get_request_and_response)(chat, queries[i][0], queries[i][1], queries[i][2], queries[i][3], next_card_number) for i in tqdm(range(len(queries))))
     assert isinstance(req_responses, list), "Parallel jobs have not resulted in an output of type list"
     assert None not in req_responses
@@ -76,6 +81,8 @@ def run_single_ask_job(chat, cards_df, next_card_number):
 def run_multi_ask_job(chat, cards_df, card_count, next_card_number):
     parts = []
     for index, row in cards_df.iterrows():
+        if SHOULD_SUBSET and index not in subrows:
+            continue
         if len(parts) == 0 or len(parts[-1][0]) >= card_count:
             parts.append(([], []))
         parts[-1][0].append(index)
@@ -93,6 +100,8 @@ def run_multi_ask_job(chat, cards_df, card_count, next_card_number):
 def run_bundle_ask_job(chat, cards_df, card_count, next_card_number):
     parts = []
     for index, row in cards_df.iterrows():
+        if SHOULD_SUBSET and index not in subrows:
+            continue
         if len(parts) == 0 or len(parts[-1][0]) >= card_count:
             parts.append(([], []))
         parts[-1][0].append(index)
@@ -116,16 +125,19 @@ if __name__=="__main__":
     import numpy as np
     import time
     output_filename = f"synergy_results_{chat.model_identifier}_{int(time.time())}"
+    # df = pd.read_csv("IronClad Card Names.csv"i)
     df = pd.read_csv("IronClad Card Names.csv")
     # df = df[:3] # Test for first 3 cards only
-    synergies = np.zeros((len(df), len(df)))
+    synergies = np.empty((len(df), len(df)))
+    synergies[:] = np.nan
     for prompt, response in zip(prompts, responses):
         log(prompt, response, output_filename, "[injected]")
 
     # req_responses = run_single_ask_job(chat, df, next_card_number)
-    req_responses = run_bundle_ask_job(chat, df, 6, next_card_number) # AskType.NP_Multi_Card only!
+    # req_responses = run_multi_ask_job(chat, df, 4, next_card_number)
+    req_responses = run_bundle_ask_job(chat, df, 4, next_card_number) # AskType.NP_Bundle only!
     for prompt, result, id in req_responses: # type: ignore
         index1, index2 = id
         log(prompt, result, output_filename)
         synergies[index1, index2] = float(result.split()[-1])
-    pd.DataFrame(synergies).to_csv(f"{output_filename}.csv")
+    pd.DataFrame(synergies).to_csv(f"{output_filename}{'_subset' if SHOULD_SUBSET else ''}.csv")

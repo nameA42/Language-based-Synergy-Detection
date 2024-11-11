@@ -13,6 +13,26 @@ SYNERGY_KEYWORD_PLURAL = "combos"
 SYNERGY_KEYWORD_CAPITALIZED = "Combo"
 SYNERGY_KEYWORD_VERB = "combo"
 
+# SYNERGY_KEYWORD = "intertwingle"
+# SYNERGY_KEYWORD_PLURAL = "intertwingles"
+# SYNERGY_KEYWORD_CAPITALIZED = "Intertwingle"
+# SYNERGY_KEYWORD_VERB = "intertwingle"
+
+# SYNERGY_KEYWORD = "the Bahar effect"
+# SYNERGY_KEYWORD_PLURAL = "the Bahar effects"
+# SYNERGY_KEYWORD_CAPITALIZED = "The Bahar effect"
+# SYNERGY_KEYWORD_VERB = "create Bahar effect"
+
+# SYNERGY_KEYWORD = "harmony"
+# SYNERGY_KEYWORD_PLURAL = "harmonies"
+# SYNERGY_KEYWORD_CAPITALIZED = "Harmony"
+# SYNERGY_KEYWORD_VERB = "harmonize"
+
+# SYNERGY_KEYWORD = "zeebu"
+# SYNERGY_KEYWORD_PLURAL = "zeebus"
+# SYNERGY_KEYWORD_CAPITALIZED = "Zeebu"
+# SYNERGY_KEYWORD_VERB = "zeebu"
+
 def get_sts_definitions():
     prompts = []
     responses = []

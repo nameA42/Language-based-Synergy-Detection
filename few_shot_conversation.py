@@ -6,6 +6,8 @@ import time
 from utility import TextUtil
 import pandas as pd
 
+proceed_all = True
+
 def get_cards(card_names, df):
     cards, indices = [], []
     for card_name in card_names:
@@ -40,7 +42,10 @@ def process_response(chat, prompt, response, output_filename):
             break
     print(TextUtil.get_colored_text(prompt, TextUtil.TEXT_COLOR.Yellow))
     if response is not None:
-        inp = input(f"Should we inject the response? [y/n]\n<{response[:10]} ... {response[-100:]}>")
+        if not proceed_all:
+            inp = input(f"Should we inject the response? [y/n]\n<{response[:10]} ... {response[-100:]}>")
+        else:
+            inp = 'y'
         if inp in ['y', 'yes', 'Y', 'Yes', 'YES']:
             chat.inject(prompt, response)
         else:
@@ -56,10 +61,13 @@ def process_response(chat, prompt, response, output_filename):
     print(response)
 
 def should_we_proceed(prompt):
-    print("Should we proceed with the prompt:")
-    print(TextUtil.get_colored_text(prompt, TextUtil.TEXT_COLOR.Red))
-    print("[y/n]")
-    inp = input()
+    inp = 'y' if prompt is not None else 'n'
+    if not proceed_all:
+        prompt = prompt if prompt is not None else "<no prompt available. ending the conversation>"
+        print("Should we proceed with the prompt:")
+        print(TextUtil.get_colored_text(prompt, TextUtil.TEXT_COLOR.Red))
+        print("[y/n]")
+        inp = input()
     return inp in ['y', 'yes', 'Y', 'Yes', 'YES']
 
 if __name__=="__main__":
@@ -69,7 +77,7 @@ if __name__=="__main__":
     output_filename = f"few_shot_converation_{chat.model_identifier}_{int(time.time())}"
     for index, (prompt, response) in enumerate(zip(prompts, responses)):
         process_response(chat, prompt, response, output_filename)
-        while not should_we_proceed(prompts[index+1] if index+1<len(prompts) else "<no prompt available. ending the conversation>"):
+        while not should_we_proceed(prompts[index+1] if index+1<len(prompts) else None):
             inp = input("What should the prompt be?")
             process_response(chat, inp, None, output_filename)
         print("Proceeding")

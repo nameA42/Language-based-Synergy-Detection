@@ -3,6 +3,8 @@ from sts_prompts import get_sts_prompts, get_single_card_ask, AskType
 
 break_into = 2
 
+# TODO subset
+
 if __name__=="__main__":
     system_prompt, prompts, responses, next_card_number = get_sts_prompts(ask_type=AskType.Negative_or_Positive)
     chat = OpenAIChat(OpenAIChat.OpenAIModel.GPT_4O_mini, chat_format=False, system_message=system_prompt)
