@@ -1,6 +1,4 @@
 from llm_connector import OpenAIChat
-from joblib import delayed, Parallel
-from tqdm import tqdm
 from sts_prompts import get_sts_prompts, get_single_card_ask, get_multi_card_bundle_ask, AskType
 import time
 from utility import TextUtil
