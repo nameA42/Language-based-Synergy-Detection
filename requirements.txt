@@ -5,3 +5,5 @@ openai
 # jinja2
 # torch
 # accelerate
+pandas
+joblib
