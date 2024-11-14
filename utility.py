@@ -23,3 +23,12 @@ class TextUtil:
     def get_colored_text(text: str, color: TEXT_COLOR):
         reset = '\033[0m'
         return color + text + reset
+    
+def cast(s: str, type_cast, default=None, supress_error:bool=True):
+    try:
+        return type_cast(s)
+    except ValueError as e:
+        if supress_error:
+            return default
+        raise e
+    

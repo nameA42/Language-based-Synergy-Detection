@@ -1,7 +1,7 @@
 from llm_connector import LLMConnector, OpenAIChat
 from joblib import delayed, Parallel
 from tqdm import tqdm
-from sts_prompts import get_sts_prompts, get_single_card_ask, get_multi_card_multi_ask, get_multi_card_bundle_ask, AskType
+from sts_prompts import get_sts_prompts, get_single_card_ask, get_multi_card_multi_ask, get_multi_card_bundle_ask, get_multi_card_bundle_no_local_ask, AskType
 from utility import TextUtil
 from subset import subrows
 
@@ -26,14 +26,14 @@ def ask_until_format_is_right(chat, prompt, bundle_size:None|int=None):
                 if len(vals) != bundle_size:
                     raise IncorrectResponseLengthException(len(vals), bundle_size, result)
             else:
-                val = float(result.split()[-1])
+                float(result.split()[-1])
             break
         except (ValueError, IncorrectResponseLengthException) as e:
             print(f"Unacceptable response for \"{prompt}\"")
             print(result)
             print(f"Exception: {e}")
-            if i == 2:
-                result = f'invalid response {i+1} times\n[latest] {result}\nNaN\n' * (1 if bundle_size is None else bundle_size)
+            if i == RETRY_COUNT - 1:
+                result = f'invalid response {RETRY_COUNT} times\n[latest] {result.replace("---NEXT---", "<NEXT_TOKEN_REPLACED>")}\nNaN\n' * (1 if bundle_size is None else bundle_size)
                 result += f'---NEXT---\nNaN\n' * (0 if bundle_size is None else (bundle_size - 1))
             else:
                 result = chat.ask(prompt)
@@ -60,6 +60,14 @@ def get_bundle_request_and_response(chat: LLMConnector, x_cards, y_cards, x_indi
     # print(TextUtil.get_colored_text(f"{x_indices} x {y_indices}\n", TextUtil.TEXT_COLOR.Red))
     # print(TextUtil.get_colored_text(prompt, TextUtil.TEXT_COLOR.Yellow))
     results = ask_until_format_is_right(chat, prompt, len(x_cards) * len(y_cards)).split('---NEXT---')
+    # print(TextUtil.get_colored_text('\n&\n'.join(results), TextUtil.TEXT_COLOR.Blue))
+    return prompt, results, ids
+
+def get_bundle_no_local_request_and_response(chat: LLMConnector, card_pairs, index_pairs, starting_card_number):
+    prompt, ids = get_multi_card_bundle_no_local_ask(card_pairs, index_pairs, starting_card_number)
+    # print(TextUtil.get_colored_text(f"{x_indices} x {y_indices}\n", TextUtil.TEXT_COLOR.Red))
+    # print(TextUtil.get_colored_text(prompt, TextUtil.TEXT_COLOR.Yellow))
+    results = ask_until_format_is_right(chat, prompt, len(card_pairs)).split('---NEXT---')
     # print(TextUtil.get_colored_text('\n&\n'.join(results), TextUtil.TEXT_COLOR.Blue))
     return prompt, results, ids
 
@@ -116,6 +124,30 @@ def run_bundle_ask_job(chat, cards_df, card_count, next_card_number):
         ids += chunk_is
     return zip(prompts, results, ids)
 
+def run_bundle_no_local_ask_job(chat, cards_df, eq_bundle_card_count, next_card_number):
+    import math
+    import random
+    eq_bundle_splits = math.ceil(len(cards_df) / eq_bundle_card_count)
+    queries = [([], []) for _ in range(eq_bundle_splits) for _ in range(eq_bundle_splits)]
+    random.seed(42)
+    for index1, row1 in cards_df.iterrows():
+        if SHOULD_SUBSET and index1 not in subrows:
+            continue
+        for index2, row2 in cards_df.iterrows():
+            if SHOULD_SUBSET and index2 not in subrows:
+                continue
+            query = random.choice([query for query in queries if len(query[0]) < eq_bundle_card_count * eq_bundle_card_count])
+            query[0].append((row1, row2))
+            query[1].append((index1, index2))
+    req_responses = Parallel(n_jobs=thread_count)(delayed(get_bundle_no_local_request_and_response)(chat, queries[i][0], queries[i][1], next_card_number) for i in tqdm(range(len(queries))))
+    assert isinstance(req_responses, list), "Parallel jobs have not resulted in an output of type list"
+    prompts, results, ids = [], [], []
+    for chunk_p, chunk_rs, chunk_is in req_responses: # type: ignore
+        prompts += [chunk_p] + ['[continued from last responses]'] * (len(chunk_rs) - 1)
+        results += chunk_rs
+        ids += chunk_is
+    return zip(prompts, results, ids)
+
 if __name__=="__main__":
     system_prompt, prompts, responses, next_card_number = get_sts_prompts(ask_type=AskType.NP_Bundle, shot_count=None)
     chat = OpenAIChat(OpenAIChat.OpenAIModel.GPT_4O_mini, chat_format=False, system_message=system_prompt)
@@ -127,7 +159,10 @@ if __name__=="__main__":
     output_filename = f"synergy_results_{chat.model_identifier}_{int(time.time())}"
     # df = pd.read_csv("IronClad Card Names.csv"i)
     df = pd.read_csv("IronClad Card Names.csv")
-    # df = df[:3] # Test for first 3 cards only
+    # df = df[:6] # Test for first 3 cards only
+    df = df.sample(frac=1, random_state=42).reset_index(drop=False)
+    index_mapping = {new_idx: old_idx for new_idx, old_idx in enumerate(df['index'])}
+
     synergies = np.empty((len(df), len(df)))
     synergies[:] = np.nan
     for prompt, response in zip(prompts, responses):
@@ -135,9 +170,10 @@ if __name__=="__main__":
 
     # req_responses = run_single_ask_job(chat, df, next_card_number)
     # req_responses = run_multi_ask_job(chat, df, 4, next_card_number)
-    req_responses = run_bundle_ask_job(chat, df, 4, next_card_number) # AskType.NP_Bundle only!
+    # req_responses = run_bundle_ask_job(chat, df, 4, next_card_number) # AskType.NP_Bundle only!
+    req_responses = run_bundle_no_local_ask_job(chat, df, 4, next_card_number) # AskType.NP_Bundle only!
     for prompt, result, id in req_responses: # type: ignore
         index1, index2 = id
         log(prompt, result, output_filename)
-        synergies[index1, index2] = float(result.split()[-1])
+        synergies[index_mapping[index1], index_mapping[index2]] = float(result.split()[-1])
     pd.DataFrame(synergies).to_csv(f"{output_filename}{'_subset' if SHOULD_SUBSET else ''}.csv")

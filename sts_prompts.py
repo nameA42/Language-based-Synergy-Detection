@@ -974,3 +974,23 @@ def get_multi_card_bundle_ask(cards_x, cards_y, x_indices, y_indices, starting_c
             question_counter += 1
             ids.append((x, y))
     return prompt, ids
+
+def get_multi_card_bundle_no_local_ask(card_pairs, index_pairs, starting_card_number: int):
+    prompt = "Let's say we have:\nCards:\n"
+    card_def = {}
+    def add_to_prompt(card, ind, prompt, card_def, starting_card_number):
+        if card_def.get(ind, None) is None:
+            prompt += f'''Card {starting_card_number} ({card['Type']} Type) - Cost {card['Cost']}: "{card['Description']}"\n'''
+            card_def[ind] = starting_card_number
+            starting_card_number += 1
+        return prompt, starting_card_number
+    for (card1, card2), (ind1, ind2) in zip(card_pairs, index_pairs):
+        prompt, starting_card_number = add_to_prompt(card1, ind1, prompt, card_def, starting_card_number)
+        prompt, starting_card_number = add_to_prompt(card2, ind2, prompt, card_def, starting_card_number)
+    prompt += "Cases:\n"
+    for question_ind, (x, y) in enumerate(index_pairs):
+        if x == y:
+            prompt += f"{question_ind+1}. What is the {SYNERGY_KEYWORD} effect of playing card {card_def[x]}, then another one of card {card_def[x]} again?\n"
+        else:
+            prompt += f"{question_ind+1}. What is the {SYNERGY_KEYWORD} effect of playing card {card_def[x]}, then card {card_def[y]}?\n"
+    return prompt, index_pairs
