@@ -13,6 +13,11 @@ SYNERGY_KEYWORD_PLURAL = "combos"
 SYNERGY_KEYWORD_CAPITALIZED = "Combo"
 SYNERGY_KEYWORD_VERB = "combo"
 
+# SYNERGY_KEYWORD = "<combo>"
+# SYNERGY_KEYWORD_PLURAL = "<combo>s"
+# SYNERGY_KEYWORD_CAPITALIZED = "<combo>"
+# SYNERGY_KEYWORD_VERB = "<combo>"
+
 # SYNERGY_KEYWORD = "intertwingle"
 # SYNERGY_KEYWORD_PLURAL = "intertwingles"
 # SYNERGY_KEYWORD_CAPITALIZED = "Intertwingle"
@@ -79,6 +84,7 @@ class AskType(Enum):
         Legacy = -1,
         Negative_or_Positive = 0,
         NP_Bundle = 1,
+        NP_Bundle_Revised = 2
 def get_sts_ask(ask_type: AskType):
     if ask_type == AskType.Legacy:
         prompt = dedent(
@@ -101,7 +107,7 @@ def get_sts_ask(ask_type: AskType):
             -2: strong negative {SYNERGY_KEYWORD}
             When I give you the card descriptions, I want these exact three things. Make sure to describe each part and to end your response by writing the final number in a single line.
             Any questions?\n''')
-    elif ask_type in [AskType.Negative_or_Positive, AskType.NP_Bundle]:
+    elif ask_type in [AskType.Negative_or_Positive, AskType.NP_Bundle, AskType.NP_Bundle_Revised]:
         prompt = dedent(
             f'''Now, I want you to help me understand card {SYNERGY_KEYWORD} effects.
             A {SYNERGY_KEYWORD} effect is when two cards have some additional effect when played together when compared to playing them separately.
@@ -884,6 +890,292 @@ def get_few_shot_examples(ask_type: AskType, shot_count=None):
 
             ### Conclusion:
             The sequential play of two Card 4s results in stacking of Block, a straightforward cumulative effect that does not introduce new positive or negative synergy beyond the individual card effects. As such, there isn't a net new {SYNERGY_KEYWORD} effect present.
+
+            Final score:
+            0\n''')]
+        responses.append(''.join(case_responses[:shot_count]))
+        next_card_number = cards_needed[shot_count-1] + 1
+    elif ask_type == AskType.NP_Bundle_Revised:
+        # same as AskType.Negative_or_Positive, only bundled all cards together
+        prompts, responses = [], []
+        cards_needed = [2, 2, 3, 3, 3, 4, 4, 4]
+        prompts.append(dedent(
+            f'''Ok, let's think! I give you some card descriptions and ask you for your analysis on a few pairs. I want to separate the analysis for each case by a line containing only ---NEXT---.
+            Pay attention to the exact description of each card and the correct order of differnt effects when playing it.
+            When evaluating {SYNERGY_KEYWORD} between two cards, note that the scenario that you imagine should rely on these two cards being played in this exact order.
+            In other words, if you remove one card from the scenario, the {SYNERGY_KEYWORD} that your describing shouldn't exist anymore.
+            Let's say we have:
+            Cards:\n'''))
+        cards_defs = [
+            f'''Card 1 (Attack Type) - Cost 4: "Costs 1 less energy for each time you lose HP in combat. Deal 18 damage."\n''',
+            f'''Card 2 (Attack Type) - Cost 2: "Deal 8 damage. Apply 2 Vulnerable."\n''',
+            f'''Card 3 (Skill Type) - Cost 0: "Lose 3 HP. Gain 2 Energy."\n''',
+            f'''Card 4 (Skill Type) - Cost 1: "Gain 7 Block. Exhaust a random card from your hand."\n''',
+        ]
+        cases = [
+            f'''1. What is the {SYNERGY_KEYWORD} effect of playing card 1, then card 2?\n''',
+            f'''2. What is the {SYNERGY_KEYWORD} effect of playing card 2, then card 1?\n''',
+            f'''3. What is the {SYNERGY_KEYWORD} effect of playing card 1, then card 3?\n''',
+            f'''4. What is the {SYNERGY_KEYWORD} effect of playing card 3, then card 1?\n''',
+            f'''5. What is the {SYNERGY_KEYWORD} effect of playing card 2, then card 3?\n''',
+            f'''6. What is the {SYNERGY_KEYWORD} effect of playing card 4, then card 2?\n''',
+            f'''7. What is the {SYNERGY_KEYWORD} effect of playing card 4, then card 1?\n''',
+            f'''8. What is the {SYNERGY_KEYWORD} effect of playing card 4, then another one of card 4 again?\n''',
+        ]
+        if shot_count is None:
+            shot_count = len(cases)
+        assert shot_count <= len(cases), f"only {len(cases)} examples available, requested {shot_count}-shot"
+        # TODO 0 should still work, but the prompt should be slightly modified, or this prompt should be completely removed.
+        # Also, I expect 0 to create formatting problems, since LLM doesn't keep to the requested format that way
+        assert shot_count > 0, f"only positive example count is supported"
+        assert max(cards_needed) == len(cards_defs), "number of card definitions doesn't match the maximum supported card count"
+        assert len(cards_needed) == len(cases), "cards_needed doesn't match the info for every case"
+        prompts[-1] += ''.join(cards_defs[:cards_needed[shot_count-1]])
+        prompts[-1] += 'Cases:\n'
+        prompts[-1] += ''.join(cases[:shot_count])
+        case_responses = [dedent(
+            f'''# Case 1
+            ### Card Descriptions:
+            - **Card 1:**
+            - Type: Attack
+            - Cost: 4
+            - Costs 1 less energy for each time you lose HP in combat. Deal 18 damage.
+            
+            - **Card 2:**
+            - Type: Attack
+            - Cost: 2
+            - Deal 8 damage. Apply 2 Vulnerable.
+
+            ### Order of Events
+            - **Playing Card 1 First:**
+                - You deal 18 damage to the enemy.
+                - The energy cost reduction mechanic of Card 1 does not directly affect Card 2.
+            
+            - **Playing Card 2 Next:**
+                - After Card 1, Card 2 deals 8 damage and applies 2 turns of Vulnerable.
+                - Vulnerable does not retroactively enhance Card 1's damage, as it should be applied *before* dealing Attack damage.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The ideal scenario would be to apply Vulnerable before dealing damage to maximize impact, but here, Card 1 is played first, negating this potential synergy.
+            - There is no inherent synergy gained by playing Card 1 before Card 2. The ordering does not yield any extra advantage or disadvantage compared to playing them separately, especially since Vulnerable enhances future damage, not past damage.
+
+            ### Conclusion:
+            Since playing Card 1 followed by Card 2 does not create an advantageous effect when considering the order of operations, and since no special disadvantage arises from this sequence beyond not maximizing potential damage output, there isn’t a notable {SYNERGY_KEYWORD} effect here.
+
+            Final score:
+            0\n'''),
+            dedent(
+            f'''---NEXT---
+            # Case 2
+            ### Card Descriptions:
+            - **Card 2:**
+            - Type: Attack
+            - Cost: 2
+            - Deal 8 damage. Apply 2 Vulnerable.
+
+            - **Card 1:**
+            - Type: Attack
+            - Cost: 4
+            - Costs 1 less energy for each time you lose HP in combat. Deal 18 damage.
+
+            ### Order of Events
+            - **Playing Card 2 First:**
+                - You deal 8 damage to the enemy and apply 2 turns of Vulnerable, increasing subsequent Attack damage by 50% for 2 turns.
+            
+            - **Playing Card 1 Next:**
+                - Card 1 is now able to take advantage of the Vulnerable status applied by Card 2, since it applies Attack damage.
+                - When Card 1 deals 18 damage, with the opponent being Vulnerable, it actually deals 27 damage (18 damage increased by 50%). This increases the total damage output from the sequence of plays.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Playing Card 2 first and applying Vulnerable means that Card 1's damage is increased by 50% due to the Vulnerable status.
+            - The combined damage of these plays is effectively 35 damage (8 from Card 2 and 27 from Card 1 under vulnerability effects), compared to 26 damage (8 + 18) if Vulnerable were not in place when Card 1 was played.
+            - The described {SYNERGY_KEYWORD} is between card 2 and 1, since removing any of these two cards from the scenario disrupts the {SYNERGY_KEYWORD}.
+
+            ### Conclusion:
+            This sequence creates a positive synergy due to the effective use of Vulnerable status to amplify damage from Card 1, making it a positive {SYNERGY_KEYWORD}.
+
+            Final score:
+            1\n'''),
+            dedent(
+            f'''---NEXT---
+            # Case 3
+            ### Card Descriptions:
+            - **Card 1:**
+            - Type: Attack
+            - Cost: 4
+            - Costs 1 less energy for each time you lose HP in combat. Deal 18 damage.
+
+            - **Card 3:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 3 HP. Gain 2 Energy.
+
+            ### Order of Events
+            - **Playing Card 1 First:**
+                - Initially costs 4 energy and deals 18 damage.
+
+            - **Playing Card 3 Next:**
+                - You lose 3 HP, which potentially activates the effect of reducing Card 1's cost if played in future turns. However, since Card 1 has already been played, the immediate scenario doesn’t directly benefit from the cost reduction.
+                - Gain 2 additional energy. There is no benefit from the extra energy that is specific to the existence of Card 1 in this scenario.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The play order implies no immediate synergy because any potential benefit from Card 3's effect on Card 1 is realized only in future plays of Card 1, provided it's repeatedly drawn in combat.
+            - Card 3 grants more resources (energy) and theoretically allows for more plays, but for the immediate sequence of Card 1 then Card 3, there are no direct efficiency gains or additional effects.
+
+            ### Conclusion:
+            Since the described order doesn't produce an immediate advantageous or disadvantageous effect, considering the given conditions, there is no {SYNERGY_KEYWORD} in the sequence where Card 1 is played before Card 3.
+
+            Final score:
+            0\n'''),
+            dedent(
+            f'''---NEXT---
+            # Case 4
+            ### Card Descriptions:
+            - **Card 3:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 3 HP. Gain 2 Energy.
+
+            - **Card 1:** 
+            - Type: Attack
+            - Cost: 4
+            - Costs 1 less energy for each time you lose HP in combat. Deal 18 damage.
+
+            ### Order of Events
+            - **Playing Card 3 First:**
+                - You lose 3 HP, activating the cost reduction mechanic of Card 1.
+                - Unrelated to Card 1, you also gain 2 additional energy, increasing your resource pool for the current turn.
+            
+            - **Playing Card 1 Next:**
+                - The cost of Card 1 is now reduced by 1 due to the HP loss from Card 3.
+                - This lets you save 1 energy, which can be used to play additional cards during your turn.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Playing Card 3 first directly synergizes with Card 1 by reducing Card 1’s cost through the HP loss mechanic.
+            - The extra energy provided by card 3 is not part of the {SYNERGY_KEYWORD} effect, since it is not specific to these two cards. Card 3 would have increased the available energy even if Card 1 was not part of the scenario.
+
+            ### Conclusion:
+            The play order of Card 3 followed by Card 1 results in a positive {SYNERGY_KEYWORD} due to the immediate cost reduction, which optimizes your energy usage and potentially broadens your strategic options for the rest of the turn.
+
+            Final score:
+            1\n'''),
+            dedent(
+            f'''---NEXT---
+            # Case 5
+            ### Card Descriptions:
+            - **Card 2:**
+            - Type: Attack
+            - Cost: 2
+            - Deal 8 damage. Apply 2 Vulnerable.
+
+            - **Card 3:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 3 HP. Gain 2 Energy.
+
+            ### Order of Events
+            - **Playing Card 2 First:**
+                - You spend 4 energy to deal 8 damage and apply 2 Vulnerable to an enemy.
+            
+            - **Playing Card 3 Next:**
+                - You gain 2 energy from Card 3. However, this gain is not part of the interaction between these two cards, and will happen even if Card 2 was not part of this scenario.
+                - The 3 HP loss from Card 3 does not directly interact with Card 2.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Playing Card 2 after Card 3 allows for potential further plays due to the energy burst from Card 3. However, there is no direct synergy between the cards' effects themselves.
+            - Card 3 provides additional energy but playing it after Card 2 just restores some energy spent, which is useful for continuing the turn with more plays but not a synergistic {SYNERGY_KEYWORD} specific to these two cards' interactions.
+
+            ### Conclusion:
+            The sequence offers no notable synergistic interaction beyond regaining energy to play more cards. While this order may allow for greater flexibility in a turn by reopening energy options, nothing about the cards’ effects inherently enhances or diminishes the other's utility.
+
+            Final score:
+            0\n'''),
+            dedent(
+            f'''---NEXT---
+            # Case 6
+            ### Card Descriptions:
+            - **Card 4:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 7 Block. Exhaust a random card from your hand.
+
+            - **Card 2:**
+            - Type: Attack
+            - Cost: 2
+            - Deal 8 damage. Apply 2 Vulnerable.
+
+            ### Order of Events
+            - **Playing Card 4 First:**
+            - Gain Block, exhaust a random card. This can impact any card, but it’s important to note this does not specifically interact with Card 2’s mechanism or effects.
+
+            - **Playing Card 2 Next:**
+            - Playing Card 2 results in dealing 8 damage and applying 2 Vulnerable.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Playing Card 4 first gains Block and exhausts a random card. Neither the Block nor the exhaust effect change the effect of playing Card 2.
+            - Playing Card 2 deals damage and applies Vulnerable. Card 4 does not have any specific {SYNERGY_KEYWORD} with any of these effects.
+
+            ### Conclusion:
+            Given that the risk of losing a card to exhaustion from Card 4 is an inherent risk not specific to Card 2, the sequence doesn't introduce any unique advantages or disadvantages specifically related to Card 2 beyond the inherent exhausting mechanic. Thus, there is no direct {SYNERGY_KEYWORD} effect due to playing these two cards in this exact order.
+
+            Final score:
+            0\n'''),
+            dedent(
+            f'''---NEXT---
+            # Case 7
+            ### Card Descriptions:
+            - **Card 4:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 7 Block. Exhaust a random card from your hand.
+
+            - **Card 1:**
+            - Type: Attack
+            - Cost: 4
+            - Costs 1 less energy for each time you lose HP in combat. Deal 18 damage.
+
+            ### Order of Events
+            - **Playing Card 4 First:**
+                - You gain 7 Block to protect against incoming damage, which is generally positive.       
+                - A random card from your hand is exhausted. This is an effect inherent to Card 4 but doesn't specifically impact Card 1 more than any other card.
+
+            - **Playing Card 1 Next:**
+                - Costs 4 energy, potentially reduced by previous damage taken. If Card 4 was played in a previous turn, it could have blocked some of the incoming damage, which can prevent the cost reduction effect of Card 1.
+                - Deals 18 damage, which is not affected by Card 4.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Gaining Block reduces the potential to take damage this turn, which could have reduced Card 1’s energy cost if the player would have taken HP loss.
+            - Although gaining Block is beneficial for immediate protection, this effect is not an interaction between these two cards. What is specific to these cards is that this Block indirectly reduces the possibility of taking advantage of Card 1’s cost reduction mechanic.
+
+            ### Conclusion:
+            Considering the subtle negative synergy between gaining Block and potentially reducing Card 1's cost, the sequence can be considered a slight negative {SYNERGY_KEYWORD} due to the fact that playing Card 4 first may inadvertently result in a less optimal use of resources for playing Card 1.
+
+            Final score:
+            -1\n'''),
+            dedent(
+            f'''---NEXT---
+            # Case 8
+            ### Card Descriptions:
+            - **Card 4:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 7 Block. Exhaust a random card from your hand.
+
+            ### Order of Events
+            - **Playing Card 4 First:**
+                - Provides 7 Block for protection.
+                - Exhausts a random card from your hand as a part of its fundamental effect.
+
+            - **Playing Card 4 Next:**
+                - Adds another 7 Block, further boosting your defense.
+                - Again exhausts a random card, removing a card from your hand.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:  
+            - Normally, we expect to gain Block and exhaust one card from our hand by playing Card 4.
+            - Here, every time we play Card 4, we have this effect. There is no additional interaction that is a result of this exact combination.
+
+            ### Conclusion:
+            There’s no direct synergy or additional interplay between the two instances of Card 4 beyond their individual effects stacking.
 
             Final score:
             0\n''')]

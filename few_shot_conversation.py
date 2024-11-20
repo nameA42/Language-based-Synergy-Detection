@@ -47,11 +47,15 @@ def process_response(chat, prompt, response, output_filename):
         if inp in ['y', 'yes', 'Y', 'Yes', 'YES']:
             chat.inject(prompt, response)
         else:
-            input("asking for new response ...")
-            response = chat.ask(prompt)
+            if input("asking for new response ... [enter stop if you want to skip the response]") == "stop":
+                response = "[stopped]"
+            else:
+                response = chat.ask(prompt)
     else:
-        input("asking for new response ...")
-        response = chat.ask(prompt)
+        if input("asking for new response ... [enter stop if you want to skip the response]") == "stop":
+            response = "[stopped]"
+        else:
+            response = chat.ask(prompt)
     with open(f"{output_filename}.log", "a", encoding='utf-8') as f:
         f.write(prompt)
         f.write(response)
@@ -70,8 +74,8 @@ def should_we_proceed(prompt):
 
 if __name__=="__main__":
     # system_prompt, prompts, responses, _ = get_sts_prompts(ask_type=AskType.Negative_or_Positive)
-    system_prompt, prompts, responses, _ = get_sts_prompts(ask_type=AskType.NP_Bundle)
-    chat = OpenAIChat(OpenAIChat.OpenAIModel.GPT_4O, chat_format=True, system_message=system_prompt)
+    system_prompt, prompts, responses, _ = get_sts_prompts(ask_type=AskType.NP_Bundle_Revised)
+    chat = OpenAIChat(OpenAIChat.OpenAIModel.GPT_4O_mini, chat_format=True, system_message=system_prompt)
     output_filename = f"few_shot_converation_{chat.model_identifier}_{int(time.time())}"
     for index, (prompt, response) in enumerate(zip(prompts, responses)):
         process_response(chat, prompt, response, output_filename)

@@ -79,7 +79,7 @@ class OpenAIChat(LLMConnector):
     
     def __init__(self, openAI_model: OpenAIModel, system_message: str|None=None, chat_format=True):
         if openAI_model == OpenAIChat.OpenAIModel.GPT_4O:
-            print("[Warning] Using the more expensive GPT 4O model")
+            input("[Warning] Using the more expensive GPT 4O model [press Enter to continue]")
         self.openAI_model = openAI_model
         self.chat_format = chat_format
         self.chat_log = [] if system_message is None else [{"role": "system", "content": system_message}]
@@ -110,7 +110,7 @@ class OpenAIChat(LLMConnector):
         self.chat_log.append({"role": "user", "content": request_text})
         self.chat_log.append({"role": "assistant", "content": response_text})
     
-    def _prompt_to_request(self, prompt: str) -> object:
+    def _prompt_to_request(self, prompt: str) -> dict:
         # https://platform.openai.com/docs/guides/chat-completions/overview
         return {
                 'model': self.openAI_model,
@@ -125,6 +125,17 @@ class OpenAIChat(LLMConnector):
             "url": "/v1/chat/completions",
             "body": request,
         }
+    
+    def as_fine_tuning_example(self):
+        messages: list[dict] = copy.deepcopy(self.chat_log)
+        for message in messages:
+            if message["role"] == "assistant":
+                message["weight"] = 0
+        assert messages[-1]["role"] == "assistant", "fine-tuning log ends with user message"
+        messages[-1]["weight"] = 1
+        request = {'messages': messages}
+        return request
+    
 
 class QWENChat(LLMConnector):
     class QWENModel(StrEnum):

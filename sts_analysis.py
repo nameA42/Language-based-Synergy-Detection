@@ -22,13 +22,13 @@ def ask_until_format_is_right(chat, prompt, bundle_size:None|int=None):
     for i in range(RETRY_COUNT):
         try:
             if bundle_size is not None:
-                vals = [float(r.split()[-1] if len(r) > 0 else r) for r in result.split('---NEXT---')]
+                vals = [float((r.split()[-1]) if len(r) > 0 else r) for r in result.split('---NEXT---')]
                 if len(vals) != bundle_size:
                     raise IncorrectResponseLengthException(len(vals), bundle_size, result)
             else:
                 float(result.split()[-1])
             break
-        except (ValueError, IncorrectResponseLengthException) as e:
+        except (ValueError, IncorrectResponseLengthException, IndexError) as e:
             print(f"Unacceptable response for \"{prompt}\"")
             print(result)
             print(f"Exception: {e}")
@@ -139,6 +139,7 @@ def run_bundle_no_local_ask_job(chat, cards_df, eq_bundle_card_count, next_card_
             query = random.choice([query for query in queries if len(query[0]) < eq_bundle_card_count * eq_bundle_card_count])
             query[0].append((row1, row2))
             query[1].append((index1, index2))
+    queries = [query for query in queries if len(query[0]) > 0]
     req_responses = Parallel(n_jobs=thread_count)(delayed(get_bundle_no_local_request_and_response)(chat, queries[i][0], queries[i][1], next_card_number) for i in tqdm(range(len(queries))))
     assert isinstance(req_responses, list), "Parallel jobs have not resulted in an output of type list"
     prompts, results, ids = [], [], []
@@ -157,10 +158,9 @@ if __name__=="__main__":
     import numpy as np
     import time
     output_filename = f"synergy_results_{chat.model_identifier}_{int(time.time())}"
-    # df = pd.read_csv("IronClad Card Names.csv"i)
     df = pd.read_csv("IronClad Card Names.csv")
     # df = df[:6] # Test for first 3 cards only
-    df = df.sample(frac=1, random_state=42).reset_index(drop=False)
+    df = df.sample(frac=1, random_state=42).reset_index(drop=False) #shuffle
     index_mapping = {new_idx: old_idx for new_idx, old_idx in enumerate(df['index'])}
 
     synergies = np.empty((len(df), len(df)))
@@ -170,8 +170,8 @@ if __name__=="__main__":
 
     # req_responses = run_single_ask_job(chat, df, next_card_number)
     # req_responses = run_multi_ask_job(chat, df, 4, next_card_number)
-    # req_responses = run_bundle_ask_job(chat, df, 4, next_card_number) # AskType.NP_Bundle only!
-    req_responses = run_bundle_no_local_ask_job(chat, df, 4, next_card_number) # AskType.NP_Bundle only!
+    req_responses = run_bundle_ask_job(chat, df, 4, next_card_number) # AskType.NP_Bundle/Revised only!
+    # req_responses = run_bundle_no_local_ask_job(chat, df, 4, next_card_number) # AskType.NP_Bundle/Revised only!
     for prompt, result, id in req_responses: # type: ignore
         index1, index2 = id
         log(prompt, result, output_filename)
