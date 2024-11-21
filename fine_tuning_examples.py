@@ -484,6 +484,478 @@ examples = [
             Final score:
             0""")
     },
+    {
+        "Question": TextUtil.dedent(f"""Let's say we have:
+        Cards:
+        Card 5 (Skill Type) - Cost 1: "Gain 5 Block. Upgrade a card in your hand for the rest of combat."
+        Card 6 (Skill Type) - Cost 1: "Ethereal. Gain 10 Block."
+        Card 7 (Skill Type) - Cost 1: "Add 2 Wounds to your hand. Gain 15 Block."
+        Card 8 (Power Type) - Cost 3: "Block is not removed at the start of your turn."
+        Card 9 (Attack Type) - Cost 1: "Deal damage equal to your current Block."
+        Card 10 (Skill Type) - Cost 2: "Double your current Block."
+        Card 11 (Power Type) - Cost 1: "At the end of your turn, gain 3 Block."
+        Cases:
+        1. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 9?
+        2. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 10?
+        3. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 11?
+        4. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 8?
+        5. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 9?
+        6. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 10?
+        7. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 11?
+        8. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 8?
+        9. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 9?
+        10. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 10?
+        11. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 11?
+        12. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 8?
+        13. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 9?
+        14. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 10?
+        15. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 11?
+        16. What is the {SYNERGY_KEYWORD} effect of playing card 8, then another one of card 8 again?"""),
+        "Answer": TextUtil.dedent(f"""
+            # Case 1
+            ### Card Descriptions:
+            - **Card 5:** 
+            - Type: Skill
+            - Cost: 1
+            - Gain 5 Block. Upgrade a card in your hand for the rest of combat.
+
+            - **Card 9:** 
+            - Type: Attack
+            - Cost: 1
+            - Deal damage equal to your current Block.
+
+            ### Order of Events
+            - **Playing Card 5 First:** 
+            - You gain 5 Block.
+
+            - **Playing Card 9 Next:** 
+            - Deals damage equal to your current Block (5), resulting in 5 damage.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The damage from Card 9 is reliant on the Block provided by Card 5. Without Card 5, Card 9 would deal no damage.
+            
+            ### Conclusion:
+            This sequence demonstrates a positive {SYNERGY_KEYWORD}, as Card 5 increases the functionality of Card 9 by enabling it to deal damage.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 2
+            ### Card Descriptions:
+            - **Card 5:** 
+            - Type: Skill
+            - Cost: 1
+            - Gain 5 Block. Upgrade a card in your hand for the rest of combat.
+
+            - **Card 10:** 
+            - Type: Skill
+            - Cost: 2
+            - Double your current Block.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You gain 5 Block.
+            
+            - **Playing Card 10 Next:**
+            - Doubles the Block from 5 to 10 Block.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - This showcases a very effective {SYNERGY_KEYWORD}. The initial Block from Card 5 enhances the benefit from Card 10 by providing a solid base to double.
+
+            ### Conclusion:
+            A strong {SYNERGY_KEYWORD} from the combination is clearly evident in the increased Block value.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 3
+            ### Card Descriptions:
+            - **Card 5:** 
+            - Type: Skill
+            - Cost: 1
+            - Gain 5 Block. Upgrade a card in your hand for the rest of combat.
+
+            - **Card 11:** 
+            - Type: Power
+            - Cost: 1
+            - At the end of your turn, gain 3 Block.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You gain 5 Block.
+
+            - **Playing Card 11 Next:**
+            - At the end of your turn, gain an additional 3 Block, for a total of 8 Block.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - While both cards contribute positively to Block totals, the interaction remains relatively standard and lacks further productive {SYNERGY_KEYWORD} beyond their individual effects.
+
+            ### Conclusion:
+            The total Block is increased but does not yield extraordinary outcomes due to lack of deeper interaction between both cards.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 4
+            ### Card Descriptions:
+            - **Card 5:** 
+            - Type: Skill
+            - Cost: 1
+            - Gain 5 Block. Upgrade a card in your hand for the rest of combat.
+
+            - **Card 8:** 
+            - Type: Power
+            - Cost: 3
+            - Block is not removed at the start of your turn.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You gain 5 Block.
+
+            - **Playing Card 8 Next:**
+            - This means your Block will persist into the next turn.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The ability to carry Over the Block ensures solid defensive capabilities going into future rounds, establishing beneficial resilience.
+
+            ### Conclusion:
+            This sequence reflects positive {SYNERGY_KEYWORD} for long-term block buildup.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 5
+            ### Card Descriptions:
+            - **Card 6:** 
+            - Type: Skill
+            - Cost: 1
+            - Ethereal. Gain 10 Block.
+
+            - **Card 9:** 
+            - Type: Attack
+            - Cost: 1
+            - Deal damage equal to your current Block.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You gain 10 Block.
+            
+            - **Playing Card 9 Next:**
+            - This deals damage equal to the current Block (10), resulting in 10 damage.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The damage from Card 9 directly corresponds to the Block gained from Card 6, demonstrating clear {SYNERGY_KEYWORD} by maximizing damage output based on accrued Block.
+
+            ### Conclusion:
+            This interaction is positive {SYNERGY_KEYWORD} as it utilizes the Block gain to initiate potential damage.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 6
+            ### Card Descriptions:
+            - **Card 6:** 
+            - Type: Skill
+            - Cost: 1
+            - Ethereal. Gain 10 Block.
+
+            - **Card 10:** 
+            - Type: Skill
+            - Cost: 2
+            - Double your current Block.
+
+            ### Order of Events
+            - **Playing Card 6 First:** 
+            - You gain 10 Block.
+
+            - **Playing Card 10 Next:**
+            - Doubles that Block to 20.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - This sequence demonstrates excellent {SYNERGY_KEYWORD}, doubling your current Block to amplify defensive capabilities significantly.
+
+            ### Conclusion:
+            The strong {SYNERGY_KEYWORD} results in a high degree of effectiveness through maximizing Block application.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 7
+            ### Card Descriptions:
+            - **Card 6:** 
+            - Type: Skill
+            - Cost: 1
+            - Ethereal. Gain 10 Block.
+
+            - **Card 11:** 
+            - Type: Power
+            - Cost: 1
+            - At the end of your turn, gain 3 Block.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You gain 10 Block.
+
+            - **Playing Card 11 Next:**
+            - This adds an extra 3 Block at the end of the turn, resulting in 13 Block.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Though the total Block is respectable, the effect of Card 11 does not derive additional {SYNERGY_KEYWORD} from Card 6 directly.
+
+            ### Conclusion:
+            The combination boosts total Block, but lacks deeper interaction between the plays.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 8
+            ### Card Descriptions:
+            - **Card 6:** 
+            - Type: Skill
+            - Cost: 1
+            - Ethereal. Gain 10 Block.
+
+            - **Card 8:** 
+            - Type: Power
+            - Cost: 3
+            - Block is not removed at the start of your turn.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You gain 10 Block.
+
+            - **Playing Card 8 Next:**
+            - Ensures that Block is retained for the next turn.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Retaining 10 Block for next turn creates a strategic advantage for future plays, demonstrating a good {SYNERGY_KEYWORD}.
+
+            ### Conclusion:
+            This sequence is effective due to the combination of immediate and future Block retention.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 9
+            ### Card Descriptions:
+            - **Card 7:** 
+            - Type: Skill
+            - Cost: 1
+            - Add 2 Wounds to your hand. Gain 15 Block.
+
+            - **Card 9:** 
+            - Type: Attack
+            - Cost: 1
+            - Deal damage equal to your current Block.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - You gain 15 Block and add 2 Wounds to your hand.
+
+            - **Playing Card 9 Next:**
+            - Deals damage equal to your current Block (15), resulting in 15 damage.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The damage is effectively realized due to the Block gained from Card 7. The Wounds added don't contribute to this interaction.
+
+            ### Conclusion:
+            This pair has a positive {SYNERGY_KEYWORD} with respect to damage scaling based on Block.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 10
+            ### Card Descriptions:
+            - **Card 7:** 
+            - Type: Skill
+            - Cost: 1
+            - Add 2 Wounds to your hand. Gain 15 Block.
+
+            - **Card 10:** 
+            - Type: Skill
+            - Cost: 2
+            - Double your current Block.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - You gain 15 Block and add 2 Wounds to your hand.
+
+            - **Playing Card 10 Next:**
+            - Doubles the Block to 30.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Doubling the initial Block gained from Card 7 signifies a robust outcome with benefits extracted from both cards effectively.
+
+            ### Conclusion:
+            The combination clearly exhibits positive {SYNERGY_KEYWORD} by leveraging Block enhancement.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 11
+            ### Card Descriptions:
+            - **Card 7:** 
+            - Type: Skill
+            - Cost: 1
+            - Add 2 Wounds to your hand. Gain 15 Block.
+
+            - **Card 11:** 
+            - Type: Power
+            - Cost: 1
+            - At the end of your turn, gain 3 Block.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - You gain 15 Block and 2 Wounds.
+
+            - **Playing Card 11 Next:**
+            - Provides an extra 3 Block at the turn's end, totaling 18 Block.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Although the total Block is beneficial, the wounds do not enhance the effects positively.
+
+            ### Conclusion:
+            The interaction produces a straightforward Block gain without significant intra-card {SYNERGY_KEYWORD}.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 12
+            ### Card Descriptions:
+            - **Card 7:** 
+            - Type: Skill
+            - Cost: 1
+            - Add 2 Wounds to your hand. Gain 15 Block.
+
+
+            - **Card 8:** 
+            - Type: Power
+            - Cost: 3
+            - Block is not removed at the start of your turn.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - You gain 15 Block and add 2 Wounds.
+
+            - **Playing Card 8 Next:**
+            - Ensures that the 15 Block stays through the next turn.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - This strategic pairing provides strong defensive strategies for future turns, indicating higher efficacy.
+
+            ### Conclusion:
+            This sequence demonstrates positive {SYNERGY_KEYWORD} through Block retention in subsequent turns.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 13
+            ### Card Descriptions:
+            - **Card 8:** 
+            - Type: Power
+            - Cost: 3
+            - Block is not removed at the start of your turn.
+
+            - **Card 9:** 
+            - Type: Attack
+            - Cost: 1
+            - Deal damage equal to your current Block.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - Block is retained for the next turn.
+            
+            - **Playing Card 9 Next:**
+            - Deals damage equal to the current Block.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - It showcases good use of Block retention for damage, as any block gained inbetween makes card 9 stronger because of card 8 being played.
+
+            ### Conclusion:
+            This results in a positive {SYNERGY_KEYWORD} as the damage can grow a lot.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 14
+            ### Card Descriptions:
+            - **Card 8:** 
+            - Type: Power
+            - Cost: 3
+            - Block is not removed at the start of your turn.
+
+            - **Card 10:** 
+            - Type: Skill
+            - Cost: 2
+            - Double your current Block.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - Retains Block for the next round.
+
+            - **Playing Card 10 Next:**
+            - Doubles the Block amount.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The pairing is extremely effective, ensuring the retained Block is subsequently maximized.
+
+            ### Conclusion:
+            This sequence exhibits strong positive {SYNERGY_KEYWORD} through effective interaction between cards.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 15
+            ### Card Descriptions:
+            - **Card 8:** 
+            - Type: Power
+            - Cost: 3
+            - Block is not removed at the start of your turn.
+
+            - **Card 11:** 
+            - Type: Power
+            - Cost: 1
+            - At the end of your turn, gain 3 Block.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - Retains Block into the next turn.
+
+            - **Playing Card 11 Next:**
+            - Adds additional 3 Block at the end.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The effective production of Block results in a steady buildup of block that can be cached in when you take damage.
+
+            ### Conclusion:
+            This interaction produces a strong {SYNERGY_KEYWORD} through heightened Block totals.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 16
+            ### Card Descriptions:
+            - **Card 8:** 
+            - Type: Power
+            - Cost: 3
+            - Block is not removed at the start of your turn.
+
+            ### Order of Events
+            - **Playing Card 8 First:** 
+            - You maintain Block from previous plays.
+
+            - **Playing Another Card 8 Next:** 
+            - Does nothing since the block is already maintined
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - While card 8 is a good card in its own right, it has no extra effect when played with another card 8.
+            
+            ### Conclusion:
+            The engagement demonstrates no {SYNERGY_KEYWORD} through playing the second card 8 because the effect cannot compound.
+
+            Final score:
+            0""")
+    },
 ]
 
 if __name__ == "__main__":
