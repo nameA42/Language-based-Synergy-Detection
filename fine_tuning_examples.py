@@ -956,6 +956,487 @@ examples = [
             Final score:
             0""")
     },
+    {
+        "Question": TextUtil.dedent(f"""Let's say we have:
+        Cards:
+        Card 5 (Attack Type) - Cost 1: "Deal 9 damage. Draw 1 card."
+        Card 6 (Skill Type) - Cost 1: "Gain 7 Block. Exhaust a random card from your hand."
+        Card 7 (Power Type) - Cost 3: "Skills cost 0. Whenever you play a Skill, Exhaust it."
+        Card 8 (Skill Type) - Cost 0: "Lose 6 HP. Gain 2 energy. Draw 3 cards. Exhaust."
+        Card 9 (Skill Type) - Cost 0: "Lose 3 HP. Gain 2 energy."
+        Card 10 (Skill Type) - Cost 1: "Create a copy of an Attack or Power card in your hand."       
+        Card 11 (Skill Type) - Cost 1: "Gain 2 energy. Exhaust."
+        Cases:
+        1. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 9?
+        2. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 10?
+        3. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 11?
+        4. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 8?
+        5. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 9?
+        6. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 10?
+        7. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 11?
+        8. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 8?
+        9. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 9?
+        10. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 10?
+        11. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 11?
+        12. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 8?
+        13. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 9?
+        14. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 10?
+        15. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 11?
+        16. What is the {SYNERGY_KEYWORD} effect of playing card 8, then another one of card 8 again?"""),
+
+        "Answer": TextUtil.dedent(
+            f"""# Case 1
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 9 damage. Draw 1 card.
+
+            - **Card 9:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 3 HP. Gain 2 energy.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You deal 9 damage to an enemy and draw 1 card.
+
+            - **Playing Card 9 Next:**
+            - You lose 3 HP, gain 2 energy.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The damage dealt and card draw from Card 5 does not interact with the subsequent effects of Card 9.
+            - There's no added {SYNERGY_KEYWORD} between these two cards in their combination — they operate independently without augmenting or diminishing the effects of one another.
+
+            ### Conclusion:
+            The combination of these two cards does not produce an advantageous or disadvantageous effect.
+
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 2
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 9 damage. Draw 1 card.
+
+            - **Card 10:**
+            - Type: Skill
+            - Cost: 1
+            - Create a copy of an Attack or Power card in your hand.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You deal 9 damage to an enemy and draw 1 card.
+
+            - **Playing Card 10 Next:**
+            - You copy a different Attack or Power card if drawn.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Card 5 allows for drawing a card that could potentially be used with Card 10, giving you more options of what card to copy.
+
+            ### Conclusion:
+            Playing Card 5 first provides a direct advantage of drawing another card to use for the effect of card 10.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 3
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 9 damage. Draw 1 card.
+
+            - **Card 11:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 2 energy. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You deal 9 damage and draw a card.
+
+            - **Playing Card 11 Next:**
+            - You gain 2 energy but exhaust Card 11.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The order does not specifically enhance or reduce effects compared to playing them separately.
+            - While you gain energy from Card 11, the two card effects operate independently and do not create any chain reaction of {SYNERGY_KEYWORD} from the order.
+
+            ### Conclusion:
+            There is no direct {SYNERGY_KEYWORD} in the play order between Card 5 and Card 11. The energy gain does not depend or leverage any effects reaped from Card 5’s play.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 4
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 9 damage. Draw 1 card.
+
+            - **Card 8:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 6 HP. Gain 2 energy. Draw 3 cards. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You deal 9 damage and draw 1 card.
+
+            - **Playing Card 8 Next:**
+            - You lose 6 HP, gain 2 energy, and draw 3 more cards. The card then exhausts.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Card 5 lets you deal damage and draw a card, but Card 8 significantly enhances your card draw, pulling in 3 additional cards at the cost of 6 HP and some energy gain.
+            - If any of the drawn cards through Card 8 are usable immediately, the utility balance can shift.
+
+            ### Conclusion:
+            While Card 5 maximizes an initial attack opportunity, Card 8's play significantly expands your hand's options, leveraging more strategic plays immediately and offering better follow-up opportunities post-play. Thus, it serves as a positive {SYNERGY_KEYWORD}.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 5
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 7 Block. Exhaust a random card from your hand.
+
+            - **Card 9:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 3 HP. Gain 2 energy.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You gain 7 Block but exhaust a random card.
+
+            - **Playing Card 9 Next:**
+            - You lose 3 HP and gain 2 energy.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The only interaction occurs through the HP loss after gaining Block, where you will end up reducing your effective HP and might lean toward utilizing the Block received from Card 6 to cover for the damage.
+            - Despite the sequence order, the two cards do not positively enhance one another’s effects.  
+
+            ### Conclusion:
+            Neither card significantly augments the outcome of the other, promoting independent function rather than {SYNERGY_KEYWORD}.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 6
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 7 Block. Exhaust a random card from your hand.
+
+            - **Card 10:**
+            - Type: Skill
+            - Cost: 1
+            - Create a copy of an Attack or Power card in your hand.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You gain 7 Block, exhausting a random card.
+
+            - **Playing Card 10 Next:**
+            - You create a copy of an Attack or Power card in your hand.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The interplay between these two cards is minimal. While Card 6 provides protective Block, it does not specifically interact with Card 10’s ability to copy an Attack or Power card.       
+            - There’s no distinct advantage or iterative relationship to the combination.
+
+            ### Conclusion:
+            The effect of Block from Card 6 does not enhance or restrict the utility gained from playing Card 10. Each card serves an individual purpose rather than combine for added benefit.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 7
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 7 Block. Exhaust a random card from your hand.
+
+            - **Card 11:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 2 energy. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You gain 7 Block while exhausting a random card.
+
+            - **Playing Card 11 Next:**
+            - You gain 2 energy but exhaust Card 11.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The effects from each card do not lead into one another in terms of {SYNERGY_KEYWORD} or augmented outcomes. While the Block is an attempt to secure HP, gaining energy does not have any added effect as the two processes operate independently.
+
+            ### Conclusion:
+            Their individual impacts don’t produce a unique outcome that improves or adversely affects the effect of the other in terms of {SYNERGY_KEYWORD}, leading to an independent result.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 8
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 7 Block. Exhaust a random card from your hand.
+
+            - **Card 8:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 6 HP. Gain 2 energy. Draw 3 cards. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You gain 7 Block and exhaust a random card.
+
+            - **Playing Card 8 Next:**
+            - You lose 6 HP, gain 2 energy, and draw 3 cards.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Playing Card 6 first grants Block and possibly protects you from damage, then playing Card 8 leads to losing HP, gaining energy, and drawing cards, offering valuable hand expansion.     
+            - The sequence allows for drawing cards that may be useful in conjunction with the overflow of resource management post-play.
+
+            ### Conclusion:
+            The chance to mitigate damage before playing Card 8 opens avenues for more manageable or greater responses overall. This synergistic maneuver results in a more enriching outcome.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 9
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Power
+            - Cost: 3
+            - Skills cost 0. Whenever you play a Skill, Exhaust it.
+
+            - **Card 9:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 3 HP. Gain 2 energy.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - Skills cost 0 now and subsequently exhausting the skills played.
+
+            - **Playing Card 9 Next:**
+            - Lose 3 HP and gain 2 energy due to playing a Skill.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - After playing Card 7, it allows you to utilize Card 9 without energy cost, activating the effect while having it exhaust automatically.
+            - The flow is conducive, with Card 9 benefitting directly from playing Card 7's power.        
+
+            ### Conclusion:
+            This combination promotes an effective interaction by allowing elimination of barriers while maximizing energy gain and positioning itself for future plays.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 10
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Power
+            - Cost: 3
+            - Skills cost 0. Whenever you play a Skill, Exhaust it.
+
+            - **Card 10:**
+            - Type: Skill
+            - Cost: 1
+            - Create a copy of an Attack or Power card in your hand.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - Skills now cost 0 and exhausting skills played.
+
+            - **Playing Card 10 Next:**
+            - Create a copy of an Attack or Power card.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - While playing Card 10 creates additional cards, the structure limits potential {SYNERGY_KEYWORD} since it does not trigger additional effects or leverage higher utility through the skill chain, considering the cost reduction from Card 7.
+
+            ### Conclusion:
+            The sequence initially provides advantages, but as Card 10 has a mechanical disconnect, it does not offer an extended add-on outcome.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 11
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Power
+            - Cost: 3
+            - Skills cost 0. Whenever you play a Skill, Exhaust it.
+
+            - **Card 11:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 2 energy. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - Skills now cost 0 and will be exhausted upon use.
+
+            - **Playing Card 11 Next:**
+            - Gain 2 energy by playing the skill, which gets exhausted.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The utility observed is primarily a capacity gain which benefits from having free energy with no cost. Using it provides a deeper tactical option while exhausting the card.
+
+            ### Conclusion:
+            The two cards manage to remix strategic options effectively, allowing for energy gain even though the {SYNERGY_KEYWORD} remains minimal in direct cooperative interchange.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 12
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Power
+            - Cost: 3
+            - Skills cost 0. Whenever you play a Skill, Exhaust it.
+
+            - **Card 8:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 6 HP. Gain 2 energy. Draw 3 cards. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - Skills cost 0 and exhaust thereafter.
+
+            - **Playing Card 8 Next:**
+            - You lose 6 HP, gain 2 energy, and draw 3 cards.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Using Card 7 before Card 8 provides opportunities by translating HP loss into effective card draw and energy gain mechanics.
+            - The ability to play Card 8 without energy charges enhances play progression.
+
+            ### Conclusion:
+            The sequence directly augments results and leads to collectively useful returns, as it mixes HP management with strategic energy recovery.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 13
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 6 HP. Gain 2 energy. Draw 3 cards. Exhaust.
+
+            - **Card 9:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 3 HP. Gain 2 energy.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - Lose 6 HP, gain 2 energy, draw 3 cards, exhaust it.
+
+            - **Playing Card 9 Next:**
+            - Lose an additional 3 HP but gain 2 energy.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The combination incentivizes energy management and allows you to draw more available cards post the HP loss.
+            - Losing HP is generative through both plays and adds overall utility to potential further actions.
+
+            ### Conclusion:
+            Though both cards make you lose HP, they effectively build pathways toward gaining energy and card draw. Therefore, they form a positive cycle in utility.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 14
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 6 HP. Gain 2 energy. Draw 3 cards. Exhaust.
+
+            - **Card 10:**
+            - Type: Skill
+            - Cost: 1
+            - Create a copy of an Attack or Power card in your hand.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - Lose 6 HP. Gain 2 energy and draw 3 cards.
+
+            - **Playing Card 10 Next:**
+            - Create a copy of an Attack or Power card.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - By drawing 3 cards through Card 8, it allows the player to have alternatives available to copy with Card 10.
+            - While Card 10 can create beneficial copies, the energy gain offered through the first play does not specifically tie itself into your {SYNERGY_KEYWORD} pathway moving forward.
+
+            ### Conclusion:
+            There’s a connection in terms of potentially getting a card to utilize but the overall gain from Card 8 is less interconnected directly to the effect produced by Card 10.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 15
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 6 HP. Gain 2 energy. Draw 3 cards. Exhaust.
+
+            - **Card 11:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 2 energy. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - Lose 6 HP, gain 2 energy, draw 3 cards.
+
+            - **Playing Card 11 Next:**
+            - Gain an additional 2 energy, exhausting Card 11.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Playing Card 8 already provides the player with 2 energy while drawing 3 cards, and then playing Card 11 allows for an additional energy gain at the cost of exhausting the card.
+            - The order does not particularly enhance or detract from outcomes established by playing Card 8 first.
+
+            ### Conclusion:
+            Each of the effects occurs in isolation, granting enhancements without reshaping much of the previous energy mechanics from the first part, leading to an outcome lesser than expected.     
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 16
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 6 HP. Gain 2 energy. Draw 3 cards. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 8 Again:**
+            - You lose 6 HP, gain 2 energy, and draw 3 additional cards before exhausting it.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Repeating the action results in an added stack of energy gain and card draw recursively. The downside is accrued HP loss.
+
+            ### Conclusion:
+            Although you're losing HP, the cycled opportunity to delve further into card draw adds an incremental benefit of energy through additional throughput mechanics seen over two sequential plays.
+
+            Final score:
+            1""")
+    },
 ]
 
 if __name__ == "__main__":
