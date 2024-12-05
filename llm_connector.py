@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import openai
-import transformers
+#import transformers
 import time
 from enum import StrEnum
 import copy
@@ -137,65 +137,65 @@ class OpenAIChat(LLMConnector):
         return request
     
 
-class QWENChat(LLMConnector):
-    class QWENModel(StrEnum):
-        QWEN2_5__0_5B = "Qwen/Qwen2.5-0.5B" # ~1GB
-        QWEN2_5__1_5B = "Qwen/Qwen2.5-1.5B" # ~3GB
-        QWEN2_5__3B = "Qwen/Qwen2.5-3B" # ~?GB
-        QWEN2_5__7B = "Qwen/Qwen2.5-7B" # ~16GB
-        # list of QWEN2.5 models: https://huggingface.co/collections/Qwen/qwen25-66e81a666513e518adb90d9e
-        # list of QWEN2 models: https://huggingface.co/collections/Qwen/qwen2-6659360b33528ced941e557f
-    MODELS: dict[QWENModel, transformers.Qwen2PreTrainedModel] = {}
-    TOKENIZERS: dict[QWENModel, transformers.PreTrainedTokenizerBase] = {}
+# class QWENChat(LLMConnector):
+#     class QWENModel(StrEnum):
+#         QWEN2_5__0_5B = "Qwen/Qwen2.5-0.5B" # ~1GB
+#        QWEN2_5__1_5B = "Qwen/Qwen2.5-1.5B" # ~3GB
+#        QWEN2_5__3B = "Qwen/Qwen2.5-3B" # ~?GB
+#        QWEN2_5__7B = "Qwen/Qwen2.5-7B" # ~16GB
+#        # list of QWEN2.5 models: https://huggingface.co/collections/Qwen/qwen25-66e81a666513e518adb90d9e
+#        # list of QWEN2 models: https://huggingface.co/collections/Qwen/qwen2-6659360b33528ced941e557f
+##    MODELS: dict[QWENModel, transformers.Qwen2PreTrainedModel] = {}
+#    TOKENIZERS: dict[QWENModel, transformers.PreTrainedTokenizerBase] = {}
 
-    def get_tokenizer(self):
-        if self.qwen_model not in QWENChat.TOKENIZERS:
-            QWENChat.TOKENIZERS[self.qwen_model] = transformers.AutoTokenizer.from_pretrained(self.qwen_model)
-        return QWENChat.TOKENIZERS[self.qwen_model]
-    
-    def get_model(self):
-        if self.qwen_model not in QWENChat.MODELS:
-            QWENChat.MODELS[self.qwen_model] = transformers.AutoModelForCausalLM.from_pretrained(
-                self.qwen_model,
-                torch_dtype="auto",
-                device_map="auto"
-            )
-        return QWENChat.MODELS[self.qwen_model]
-    
-    def __init__(self, qwen_model: QWENModel, system_message: str|None=None, chat_format=True):
-        self.qwen_model = qwen_model
-        self.chat_format = chat_format
-        self.chat_log = [] if system_message is None else [{"role": "system", "content": system_message}]
-        super().__init__(str(self.qwen_model))
-    
-    def _get_response(self, request) -> tuple[int, str]:
-        text = self.get_tokenizer().apply_chat_template(**request)
-        model_inputs = self.get_tokenizer()([text], return_tensors="pt").to(self.get_model().device) # type: ignore
-        generated_ids = self.get_model().generate(
-            **model_inputs, # type: ignore
-            max_new_tokens=512,
-        )
-        generated_ids = [
-            output_ids[len(input_ids):] for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
-        ]
-        response = self.get_tokenizer().batch_decode(generated_ids, skip_special_tokens=True)[0]
-        if self.chat_format:
-            self.chat_log = request['conversation'] + [{'role': 'assistant', 'content': response}]
-        return 0, response
-    
-    def inject(self, request_text: str, response_text: str):
-        # assert self.chat_format, "you can only inject request and responses in a chat format conversation."
-        self.chat_log.append({"role": "user", "content": request_text})
-        self.chat_log.append({"role": "assistant", "content": response_text})
-    
-    def _prompt_to_request(self, prompt: str) -> object:
-        # https://platform.openai.com/docs/guides/chat-completions/overview
-        return {
-                'tokenize': False,
-                'add_generation_prompt': True,
-                'conversation': self.chat_log + [{"role": "user", "content": prompt}],
-            }
-    
-    def _get_token_limit_per_minute(self) -> int:
-        # TODO find a better solution
-        return 10_000_000 # some big number, since this is local
+#    def get_tokenizer(self):
+#        if self.qwen_model not in QWENChat.TOKENIZERS:
+#            QWENChat.TOKENIZERS[self.qwen_model] = transformers.AutoTokenizer.from_pretrained(self.qwen_model)
+#        return QWENChat.TOKENIZERS[self.qwen_model]
+#    
+#    def get_model(self):
+#        if self.qwen_model not in QWENChat.MODELS:
+#            QWENChat.MODELS[self.qwen_model] = transformers.AutoModelForCausalLM.from_pretrained(
+#                self.qwen_model,
+#                torch_dtype="auto",
+#                device_map="auto"
+#            )
+#        return QWENChat.MODELS[self.qwen_model]
+#    
+#    def __init__(self, qwen_model: QWENModel, system_message: str|None=None, chat_format=True):
+#        self.qwen_model = qwen_model
+#        self.chat_format = chat_format
+#        self.chat_log = [] if system_message is None else [{"role": "system", "content": system_message}]
+#        super().__init__(str(self.qwen_model))
+#    
+#    def _get_response(self, request) -> tuple[int, str]:
+#        text = self.get_tokenizer().apply_chat_template(**request)
+#        model_inputs = self.get_tokenizer()([text], return_tensors="pt").to(self.get_model().device) # type: ignore
+#        generated_ids = self.get_model().generate(
+#            **model_inputs, # type: ignore
+#            max_new_tokens=512,
+#        )
+#        generated_ids = [
+#            output_ids[len(input_ids):] for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
+#        ]
+#        response = self.get_tokenizer().batch_decode(generated_ids, skip_special_tokens=True)[0]
+#        if self.chat_format:
+#            self.chat_log = request['conversation'] + [{'role': 'assistant', 'content': response}]
+#        return 0, response
+#    
+#    def inject(self, request_text: str, response_text: str):
+#        # assert self.chat_format, "you can only inject request and responses in a chat format conversation."
+#        self.chat_log.append({"role": "user", "content": request_text})
+#        self.chat_log.append({"role": "assistant", "content": response_text})
+#    
+#    def _prompt_to_request(self, prompt: str) -> object:
+#        # https://platform.openai.com/docs/guides/chat-completions/overview
+#        return {
+#                'tokenize': False,
+#                'add_generation_prompt': True,
+#                'conversation': self.chat_log + [{"role": "user", "content": prompt}],
+#            }
+#    
+#    def _get_token_limit_per_minute(self) -> int:
+#        # TODO find a better solution
+#        return 10_000_000 # some big number, since this is local
