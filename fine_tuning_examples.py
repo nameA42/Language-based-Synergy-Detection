@@ -466,8 +466,7 @@ examples = [
     {
         "X_indices": [4, 38, 44, 59],
         "Y_indices": [5, 33, 43, 59],
-        "BundledAnswer": TextUtil.dedent(f"""
-            # Case 1
+        "BundledAnswer": TextUtil.dedent(f"""# Case 1
             ### Card Descriptions:
             - **Card 5:** 
             - Type: Skill
@@ -2315,7 +2314,7 @@ if __name__ == "__main__":
     import pandas as pd
     import json
     import time
-    ask_type = AskType.NP_Bundle_Revised
+    ask_type = AskType.Negative_or_Positive_Revised
     system_prompt, prompts, responses, next_card_number = get_sts_prompts(ask_type=ask_type)
     chat = OpenAIChat(OpenAIChat.OpenAIModel.GPT_4O_mini, chat_format=False, system_message=system_prompt)
     for prompt, response in zip(prompts, responses):
@@ -2345,9 +2344,11 @@ if __name__ == "__main__":
                         for y_card, y_ind in zip(y_cards, y_indices):
                             prompt, ids = get_single_card_ask(x_card, y_card, x_ind, y_ind, next_card_number)
                             prompts.append(prompt)
-                    answers = example["BundledAnswer"].split("---NEXT---")
+                    # removes the case number and splits the cases
+                    answers = ['\n'.join(answer.split('\n')[1:]) for answer in example["BundledAnswer"].split("---NEXT---\n")]
                     for prompt, answer in zip(prompts, answers):
                         example_chat = chat.copy()
+                        assert 'Case' not in answer
                         example_chat.inject(prompt, answer)
                         dump_json(example_chat, outfile)
                         counter.count()
