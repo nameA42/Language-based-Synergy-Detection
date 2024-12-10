@@ -1,38 +1,13 @@
 from utility import TextUtil
-from sts_prompts import SYNERGY_KEYWORD, SYNERGY_KEYWORD_CAPITALIZED, SYNERGY_KEYWORD_PLURAL, SYNERGY_KEYWORD_VERB
-
-
+from sts_prompts import SYNERGY_KEYWORD, SYNERGY_KEYWORD_CAPITALIZED,\
+    SYNERGY_KEYWORD_PLURAL, SYNERGY_KEYWORD_VERB
 
 examples = [
     #34, 17, 62, 6; 68, 65, 44, 6
     {
-        "Question": TextUtil.dedent(f"""Let's say we have:
-        Cards:
-        Card 5 (Power Type) - Cost 1: "Whenever you draw a Status card, draw 1 card."
-        Card 6 (Attack Type) - Cost 1: "Deal 3 damage to a random enemy 3 times."
-        Card 7 (Power Type) - Cost 0: "At the start of your turn, lose 1 HP and draw 1 card."
-        Card 8 (Attack Type) - Cost 0: "Can only be played if every card in your hand is an Attack. Deal 14 damage."
-        Card 9 (Attack Type) - Cost 2: "Exhaust all cards in your hand. Deal 7 damage for each Exhausted card. Exhaust."      
-        Card 10 (Skill Type) - Cost 1: "This turn, your next Attack is played twice."
-        Card 11 (Skill Type) - Cost 1: "Add 2 Wounds to your hand. Gain 15 Block."
-        Cases:
-        1. What is the {SYNERGY_KEYWORD} effect of playing Card 5, then Card 9?
-        2. What is the {SYNERGY_KEYWORD} effect of playing Card 5, then Card 10?
-        3. What is the {SYNERGY_KEYWORD} effect of playing Card 5, then Card 8?
-        4. What is the {SYNERGY_KEYWORD} effect of playing Card 5, then Card 11?
-        5. What is the {SYNERGY_KEYWORD} effect of playing Card 6, then Card 9?
-        6. What is the {SYNERGY_KEYWORD} effect of playing Card 6, then Card 10?
-        7. What is the {SYNERGY_KEYWORD} effect of playing Card 6, then Card 8?
-        8. What is the {SYNERGY_KEYWORD} effect of playing Card 6, then Card 11?
-        9. What is the {SYNERGY_KEYWORD} effect of playing Card 7, then Card 9?
-        10. What is the {SYNERGY_KEYWORD} effect of playing Card 7, then Card 10?
-        11. What is the {SYNERGY_KEYWORD} effect of playing Card 7, then Card 8?
-        12. What is the {SYNERGY_KEYWORD} effect of playing Card 7, then Card 11?
-        13. What is the {SYNERGY_KEYWORD} effect of playing Card 8, then Card 9?
-        14. What is the {SYNERGY_KEYWORD} effect of playing Card 8, then Card 10?
-        15. What is the {SYNERGY_KEYWORD} effect of playing Card 8, then another one of Card 8 again?
-        16. What is the {SYNERGY_KEYWORD} effect of playing Card 8, then Card 11?"""),
-        "Answer": TextUtil.dedent(
+        "X_indices": [34, 17, 62, 6],
+        "Y_indices": [68, 65, 6, 44],
+        "BundledAnswer": TextUtil.dedent(
             f"""# Case 1
             ### Card Descriptions:
             - **Card 5:**
@@ -489,33 +464,9 @@ examples = [
     },
     # 4, 38, 44, 59; 5, 33, 43, 59
     {
-        "Question": TextUtil.dedent(f"""Let's say we have:
-        Cards:
-        Card 5 (Skill Type) - Cost 1: "Gain 5 Block. Upgrade a card in your hand for the rest of combat."
-        Card 6 (Skill Type) - Cost 1: "Ethereal. Gain 10 Block."
-        Card 7 (Skill Type) - Cost 1: "Add 2 Wounds to your hand. Gain 15 Block."
-        Card 8 (Power Type) - Cost 3: "Block is not removed at the start of your turn."
-        Card 9 (Attack Type) - Cost 1: "Deal damage equal to your current Block."
-        Card 10 (Skill Type) - Cost 2: "Double your current Block."
-        Card 11 (Power Type) - Cost 1: "At the end of your turn, gain 3 Block."
-        Cases:
-        1. What is the {SYNERGY_KEYWORD} effect of playing Card 5, then Card 9?
-        2. What is the {SYNERGY_KEYWORD} effect of playing Card 5, then Card 10?
-        3. What is the {SYNERGY_KEYWORD} effect of playing Card 5, then Card 11?
-        4. What is the {SYNERGY_KEYWORD} effect of playing Card 5, then Card 8?
-        5. What is the {SYNERGY_KEYWORD} effect of playing Card 6, then Card 9?
-        6. What is the {SYNERGY_KEYWORD} effect of playing Card 6, then Card 10?
-        7. What is the {SYNERGY_KEYWORD} effect of playing Card 6, then Card 11?
-        8. What is the {SYNERGY_KEYWORD} effect of playing Card 6, then Card 8?
-        9. What is the {SYNERGY_KEYWORD} effect of playing Card 7, then Card 9?
-        10. What is the {SYNERGY_KEYWORD} effect of playing Card 7, then Card 10?
-        11. What is the {SYNERGY_KEYWORD} effect of playing Card 7, then Card 11?
-        12. What is the {SYNERGY_KEYWORD} effect of playing Card 7, then Card 8?
-        13. What is the {SYNERGY_KEYWORD} effect of playing Card 8, then Card 9?
-        14. What is the {SYNERGY_KEYWORD} effect of playing Card 8, then Card 10?
-        15. What is the {SYNERGY_KEYWORD} effect of playing Card 8, then Card 11?
-        16. What is the {SYNERGY_KEYWORD} effect of playing Card 8, then another one of Card 8 again?"""),
-        "Answer": TextUtil.dedent(f"""
+        "X_indices": [4, 38, 44, 59],
+        "Y_indices": [5, 33, 43, 59],
+        "BundledAnswer": TextUtil.dedent(f"""
             # Case 1
             ### Card Descriptions:
             - **Card 5:** 
@@ -962,34 +913,9 @@ examples = [
     },
     #15, 19, 63, 73; 25, 32, 52, 73
     {
-        "Question": TextUtil.dedent(f"""Let's say we have:
-        Cards:
-        Card 5 (Attack Type) - Cost 1: "Deal 9 damage. Draw 1 card."
-        Card 6 (Skill Type) - Cost 1: "Gain 7 Block. Exhaust a random card from your hand."
-        Card 7 (Power Type) - Cost 3: "Skills cost 0. Whenever you play a Skill, Exhaust it."
-        Card 8 (Skill Type) - Cost 0: "Lose 6 HP. Gain 2 energy. Draw 3 cards. Exhaust."
-        Card 9 (Skill Type) - Cost 0: "Lose 3 HP. Gain 2 energy."
-        Card 10 (Skill Type) - Cost 1: "Create a copy of an Attack or Power card in your hand."       
-        Card 11 (Skill Type) - Cost 1: "Gain 2 energy. Exhaust."
-        Cases:
-        1. What is the {SYNERGY_KEYWORD} effect of playing Card 5, then Card 9?
-        2. What is the {SYNERGY_KEYWORD} effect of playing Card 5, then Card 10?
-        3. What is the {SYNERGY_KEYWORD} effect of playing Card 5, then Card 11?
-        4. What is the {SYNERGY_KEYWORD} effect of playing Card 5, then Card 8?
-        5. What is the {SYNERGY_KEYWORD} effect of playing Card 6, then Card 9?
-        6. What is the {SYNERGY_KEYWORD} effect of playing Card 6, then Card 10?
-        7. What is the {SYNERGY_KEYWORD} effect of playing Card 6, then Card 11?
-        8. What is the {SYNERGY_KEYWORD} effect of playing Card 6, then Card 8?
-        9. What is the {SYNERGY_KEYWORD} effect of playing Card 7, then Card 9?
-        10. What is the {SYNERGY_KEYWORD} effect of playing Card 7, then Card 10?
-        11. What is the {SYNERGY_KEYWORD} effect of playing Card 7, then Card 11?
-        12. What is the {SYNERGY_KEYWORD} effect of playing Card 7, then Card 8?
-        13. What is the {SYNERGY_KEYWORD} effect of playing Card 8, then Card 9?
-        14. What is the {SYNERGY_KEYWORD} effect of playing Card 8, then Card 10?
-        15. What is the {SYNERGY_KEYWORD} effect of playing Card 8, then Card 11?
-        16. What is the {SYNERGY_KEYWORD} effect of playing Card 8, then another one of Card 8 again?"""),
-
-        "Answer": TextUtil.dedent(
+        "X_indices": [15, 19, 63, 73],
+        "Y_indices": [25, 32, 52, 73],
+        "BundledAnswer": TextUtil.dedent(
             f"""# Case 1
             ### Card Descriptions:
             - **Card 5:**
@@ -1444,36 +1370,10 @@ examples = [
             1""")
     },
     # 56, 64, 65, 72; 10, 40, 54, 68
-        {
-        "Question": TextUtil.dedent(f"""Let's say we have:
-        Cards:
-        Card 5 (Skill Type) - Cost 1: "If the enemy intends to attack, gain 4 Strength."
-        Card 6 (Power Type) - Cost 3: "At the start of each turn, gain 2 Strength."
-        Card 7 (Skill Type) - Cost 1: "This turn, your next Attack is played twice."
-        Card 8 (Skill Type) - Cost 1: "Double your Strength. Exhaust."
-        Card 9 (Skill Type) - Cost 1: "Play the top card of your draw pile and Exhaust it."
-        Card 10 (Skill Type) - Cost 1: "Add a random Attack to your hand. It costs 0 this turn. Exhaust."
-        Card 11 (Attack Type) - Cost 2: "Exhaust all non-Attack cards in your hand. Deal 16 damage."
-        Card 12 (Attack Type) - Cost 2: "Exhaust all cards in your hand. Deal 7 damage for each Exhausted card. Exhaust."
-        Cases:
-        1. What is the {SYNERGY_KEYWORD} effect of playing Card 5, then Card 9?
-        2. What is the {SYNERGY_KEYWORD} effect of playing Card 5, then Card 10?
-        3. What is the {SYNERGY_KEYWORD} effect of playing Card 5, then Card 11?
-        4. What is the {SYNERGY_KEYWORD} effect of playing Card 5, then Card 12?
-        5. What is the {SYNERGY_KEYWORD} effect of playing Card 6, then Card 9?
-        6. What is the {SYNERGY_KEYWORD} effect of playing Card 6, then Card 10?
-        7. What is the {SYNERGY_KEYWORD} effect of playing Card 6, then Card 11?
-        8. What is the {SYNERGY_KEYWORD} effect of playing Card 6, then Card 12?
-        9. What is the {SYNERGY_KEYWORD} effect of playing Card 7, then Card 9?
-        10. What is the {SYNERGY_KEYWORD} effect of playing Card 7, then Card 10?
-        11. What is the {SYNERGY_KEYWORD} effect of playing Card 7, then Card 11?
-        12. What is the {SYNERGY_KEYWORD} effect of playing Card 7, then Card 12?
-        13. What is the {SYNERGY_KEYWORD} effect of playing Card 8, then Card 9?
-        14. What is the {SYNERGY_KEYWORD} effect of playing Card 8, then Card 10?
-        15. What is the {SYNERGY_KEYWORD} effect of playing Card 8, then Card 11?
-        16. What is the {SYNERGY_KEYWORD} effect of playing Card 8, then Card 12?"""),
-
-        "Answer": TextUtil.dedent(
+    {
+        "X_indices": [56, 64, 65, 72],
+        "Y_indices": [10, 40, 54, 68],
+        "BundledAnswer": TextUtil.dedent(
             f"""# Case 1
             ### Card Descriptions:
             - **Card 5:**
@@ -1928,37 +1828,10 @@ examples = [
             1""")
     },
     # 4, 56, 60, 72; 2, 11, 13, 39
-        {
-        "Question": TextUtil.dedent(f"""Let's say we have:
-        Cards:
-        Card 5 (Skill Type) - Cost 1: "Gain 5 Block. Upgrade a card in your hand for the rest of combat."
-        Card 6 (Skill Type) - Cost 1: "If the enemy intends to attack, gain 4 Strength."
-        Card 7 (Power Type) - Cost 0: "Gain 2 Vulnerable. At the start of your turn, gain 1 energy."
-        Card 8 (Skill Type) - Cost 1: "Double your Strength. Exhaust."
-        Card 9 (Attack Type) - Cost 1: "Deal 6 damage."
-        Card 10 (Attack Type) - Cost 1: "Deal 9 damage. Place a card from your discard pile on top of your draw pile."
-        Card 11 (Attack Type) - Cost 1: "Gain 5 Block. Deal 5 damage."
-        Card 12 (Attack Type) - Cost 1: "Lose 2 HP. Deal 15 damage."
-        Cases:
-        1. What is the {SYNERGY_KEYWORD} effect of playing Card 5, then Card 9?
-        2. What is the {SYNERGY_KEYWORD} effect of playing Card 5, then Card 10?
-        3. What is the {SYNERGY_KEYWORD} effect of playing Card 5, then Card 11?
-        4. What is the {SYNERGY_KEYWORD} effect of playing Card 5, then Card 12?
-        5. What is the {SYNERGY_KEYWORD} effect of playing Card 6, then Card 9?
-        6. What is the {SYNERGY_KEYWORD} effect of playing Card 6, then Card 10?
-        7. What is the {SYNERGY_KEYWORD} effect of playing Card 6, then Card 11?
-        8. What is the {SYNERGY_KEYWORD} effect of playing Card 6, then Card 12?
-        9. What is the {SYNERGY_KEYWORD} effect of playing Card 7, then Card 9?
-        10. What is the {SYNERGY_KEYWORD} effect of playing Card 7, then Card 10?
-        11. What is the {SYNERGY_KEYWORD} effect of playing Card 7, then Card 11?
-        12. What is the {SYNERGY_KEYWORD} effect of playing Card 7, then Card 12?
-        13. What is the {SYNERGY_KEYWORD} effect of playing Card 8, then Card 9?
-        14. What is the {SYNERGY_KEYWORD} effect of playing Card 8, then Card 10?
-        15. What is the {SYNERGY_KEYWORD} effect of playing Card 8, then Card 11?
-        16. What is the {SYNERGY_KEYWORD} effect of playing Card 8, then Card 12?
-        """),
-
-        "Answer": TextUtil.dedent(
+    {
+        "X_indices": [4, 56, 60, 72],
+        "Y_indices": [2, 11, 13, 39],
+        "BundledAnswer": TextUtil.dedent(
             f"""# Case 1
             ### Card Descriptions:
             - **Card 5:**
@@ -2413,29 +2286,74 @@ examples = [
     },
 ]
 
+def dump_json(example_chat, outfile):
+    json_requset = example_chat.as_fine_tuning_example()
+    json.dump(json_requset, outfile)
+    outfile.write('\n')
+
+class Counter:
+    def __init__(self, min_count:int, max_count:int|None):
+        assert max_count is None or max_count >= min_count
+        assert max_count is None or max_count >= 0
+        self.min_count = min_count
+        self.max_count = max_count
+        self.counter = 0
+
+    def count(self):
+        self.counter += 1
+    
+    def min_reached(self):
+        return self.counter >= self.min_count
+    
+    def max_reached(self):
+        return self.max_count is not None and self.counter >= self.max_count
+
 if __name__ == "__main__":
     from llm_connector import OpenAIChat
-    from sts_prompts import get_sts_prompts, get_single_card_ask, AskType
+    from sts_prompts import get_sts_prompts, get_single_card_ask,\
+        get_multi_card_bundle_ask, AskType
+    import pandas as pd
     import json
     import time
-
-    system_prompt, prompts, responses, next_card_number = get_sts_prompts(ask_type=AskType.NP_Bundle_Revised)
+    ask_type = AskType.NP_Bundle_Revised
+    system_prompt, prompts, responses, next_card_number = get_sts_prompts(ask_type=ask_type)
     chat = OpenAIChat(OpenAIChat.OpenAIModel.GPT_4O_mini, chat_format=False, system_message=system_prompt)
     for prompt, response in zip(prompts, responses):
         chat.inject(prompt, response)
+    df = pd.read_csv("IronClad Card Names.csv")
     output_filename = f"finetune_dataset{int(time.time())}"
     with open(f'{output_filename}.jsonl', 'w') as outfile:
-        count = 0
-        min_count = 10
-        max_count = None
-        assert max_count is None or max_count >= min_count
-        while count < min_count:
+        counter = Counter(10, None)
+        while not counter.min_reached():
             for example in examples:
-                example_chat = chat.copy()
-                example_chat.inject(example["Question"], example["Answer"])
-                json_requset = example_chat.as_fine_tuning_example()
-                json.dump(json_requset, outfile)
-                outfile.write('\n')
-                count += 1
-                if max_count is not None and count == max_count:
+                x_indices = example["X_indices"]
+                y_indices = example["Y_indices"]
+                x_cards = [df.iloc[ind] for ind in x_indices]
+                y_cards = [df.iloc[ind] for ind in y_indices]
+                df = pd.read_csv("IronClad Card Names.csv")
+                if ask_type == AskType.NP_Bundle_Revised:
+                    example_chat = chat.copy()
+                    prompt, ids = get_multi_card_bundle_ask(x_cards, y_cards, x_indices, y_indices, next_card_number)
+                    example_chat.inject(prompt, example["BundledAnswer"])
+                    dump_json(example_chat, outfile)
+                    counter.count()
+                elif ask_type == AskType.Negative_or_Positive_Revised:
+                    prompts = []
+                    # TODO find a better way to do this.
+                    # This is dangerous because it assumes the order of questions are always X*Y
+                    for x_card, x_ind in zip(x_cards, x_indices):
+                        for y_card, y_ind in zip(y_cards, y_indices):
+                            prompt, ids = get_single_card_ask(x_card, y_card, x_ind, y_ind, next_card_number)
+                            prompts.append(prompt)
+                    answers = example["BundledAnswer"].split("---NEXT---")
+                    for prompt, answer in zip(prompts, answers):
+                        example_chat = chat.copy()
+                        example_chat.inject(prompt, answer)
+                        dump_json(example_chat, outfile)
+                        counter.count()
+                        if counter.max_reached():
+                            break
+                else:
+                    raise Exception("Unknown ask type for creating fine-tuning examples")
+                if counter.max_reached():
                     break
