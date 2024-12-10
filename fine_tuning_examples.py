@@ -903,12 +903,13 @@ examples = [
 
             ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
             - While Card 8 is a good card in its own right, it has no extra effect when played with another Card 8.
+            - In fact, the second copy does nothing but waste energy and adds no effect due to the first copy already making block last between turns.
             
             ### Conclusion:
-            The engagement demonstrates no {SYNERGY_KEYWORD} through playing the second Card 8 because the effect cannot compound.
+            The engagement demonstrates negative {SYNERGY_KEYWORD} through playing the second Card 8 because the effect cannot compound and just wastes energy.
 
             Final score:
-            0""")
+            -1""")
     },
     #15, 19, 63, 73; 25, 32, 52, 73
     {
@@ -2283,6 +2284,1364 @@ examples = [
             Final score:
             1""")
     },
+    # 33, 60, 30, 7; 31, 32, 65, 35; 5
+    {
+        "X_indices": [33, 60, 30, 7],
+        "Y_indices": [31, 32, 65, 35],
+        "BundledAnswer": TextUtil.dedent(f"""# Case 1
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Skill
+            - Cost: 2
+            - Double your current Block.
+
+            - **Card 9:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 5 damage. If the enemy is Vulnerable, gain 1 energy and draw 1 card.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You double your current Block. Let's assume you had X Block before playing, your new Block would be 2X.
+
+            - **Playing Card 9 Next:**
+            - Card 9 will deal 5 damage. There is no interaction between doubling Block and the effects of Card 9.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - There is no {SYNERGY_KEYWORD} between the two cards. Doubling your Block does not enhance the effectiveness of dealing damage or gaining energy from vulnerabilities since it’s unrelated to the Block played.
+
+            ### Conclusion:
+            No additional advantages or disadvantages arise from this sequence.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 2
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Skill
+            - Cost: 2
+            - Double your current Block.
+
+            - **Card 10:**
+            - Type: Skill
+            - Cost: 1
+            - Create a copy of an Attack or Power card in your hand.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You double your current Block.
+
+            - **Playing Card 10 Next:**
+            - You create a copy of an Attack or Power card in your hand. Block is unaffected, and Card 10 does not provide {SYNERGY_KEYWORD} with previous effects.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - As Card 10's effect is independent of Card 5, there’s no {SYNERGY_KEYWORD} or interaction between the two cards beyond individual independent effects.
+
+            ### Conclusion:
+            No {SYNERGY_KEYWORD} effects or additional advantages exist between these two.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 3
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Skill
+            - Cost: 2
+            - Double your current Block.
+
+            - **Card 11:**
+            - Type: Skill
+            - Cost: 1
+            - This turn, your next Attack is played twice.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You double your current Block.
+
+            - **Playing Card 11 Next:**
+            - This creates a buff for the next Attack played but does not interact with the Block gain from Card 5.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The doubling of the Block does not enhance the effect of having an Attack played twice. These two effects are independent from one another.
+
+            ### Conclusion:
+            No {SYNERGY_KEYWORD} effect exists between these plays, neither advantageous nor disadvantageous.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 4
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Skill
+            - Cost: 2
+            - Double your current Block.
+
+            - **Card 12:**
+            - Type: Power
+            - Cost: 1
+            - Whenever a card is Exhausted, gain 3 Block.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You double your current Block.
+
+            - **Playing Card 12 Next:**
+            - There is no Exhaustion effect taking place, so the effect gets triggered only when an exhaust action follows.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The Block gain from Card 12 happens only on Exhaust actions. Since no {SYNERGY_KEYWORD} exists between the two effects, doubling your Block does not enhance the effect derived from Exhausting cards.       
+
+            ### Conclusion:
+            No combinatory effect is seen between these plays.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 5
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Power
+            - Cost: 0
+            - Gain 2 Vulnerable. At the start of your turn, gain 1 energy.
+
+            - **Card 9:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 5 damage. If the enemy is Vulnerable, gain 1 energy and draw 1 card.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You gain 2 Vulnerable.
+
+            - **Playing Card 9 Next:**
+            - Card 9 deals 5 damage to the enemy. Since the you are now Vulnerable, not the enemy, nothing else happens.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The {SYNERGY_KEYWORD} here is nonexistent. Playing Card 6 first does not give an enemy vulnerable, which means Card 9 does not trigger the additional effects for energy and card draw.
+
+            ### Conclusion:
+            This sequence creates no {SYNERGY_KEYWORD} where playing Card 6 fails to empower Card 9.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 6
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Power
+            - Cost: 0
+            - Gain 2 Vulnerable. At the start of your turn, gain 1 energy.
+
+            - **Card 10:**
+            - Type: Skill
+            - Cost: 1
+            - Create a copy of an Attack or Power card in your hand.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You gain 2 Vulnerable.
+
+            - **Playing Card 10 Next:**
+            - You create a copy of an Attack or Power card in your hand, but it does not interact or enhance any existing cards since it’s dependent on what is currently in hand.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Card 10 can create a copy of existing attacks or power cards, and since you need more energy to play that extra card, Card 6 provides that energy, making them work well off each other.
+
+            ### Conclusion:
+            A small additional advantage occurs in this sequence, leading to a small {SYNERGY_KEYWORD}.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 7
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Power
+            - Cost: 0
+            - Gain 2 Vulnerable. At the start of your turn, gain 1 energy.
+
+            - **Card 11:**
+            - Type: Skill
+            - Cost: 1
+            - This turn, your next Attack is played twice.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You gain 2 Vulnerable.
+
+            - **Playing Card 11 Next:**
+            - This will allow your next Attack to be played twice that turn.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The increased vulnerability allows for enhanced damage, but only to the player. Any following Attack played twice does not benefit from vulnerability on you.       
+
+            ### Conclusion:
+            This sequence generates no {SYNERGY_KEYWORD} where Card 11 can not from the increased vulnerability from Card 6 since it is applied to you.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 8
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Power
+            - Cost: 0
+            - Gain 2 Vulnerable. At the start of your turn, gain 1 energy.
+
+            - **Card 12:**
+            - Type: Power
+            - Cost: 1
+            - Whenever a card is Exhausted, gain 3 Block.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You gain 2 Vulnerable.
+
+            - **Playing Card 12 Next:**
+            - You establish a future effect that grants Block whenever a card is Exhausted.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - There’s no direct destruction or {SYNERGY_KEYWORD} here. Card 12's effect links to exhaust activity that would normally lead to Block gains, not relevant with the effect of Card 6.
+
+            ### Conclusion:
+            No additional {SYNERGY_KEYWORD} interactions are present between these two.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 9
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Skill
+            - Cost: 1
+            - Enemy loses 2 Strength. Exhaust.
+
+            - **Card 9:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 5 damage. If the enemy is Vulnerable, gain 1 energy and draw 1 card.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - The enemy loses 2 Strength, and the card is then Exhausted.
+
+            - **Playing Card 9 Next:**
+            - Card 9 will deal 5 damage. There are no Vulnerable interactions preceding the attack from Card 7 and no further attacks resulting from the effect of Card 7.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The strength loss occurs before dealing damage, but Card 9 does not exploit any of these changes unless vulnerability is established. It simply does 5 damage without the benefit of exploiting vulnerabilities.
+
+            ### Conclusion:
+            Without Vulnerable preceding Card 9 being played, there’s no {SYNERGY_KEYWORD} effect to be noted.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 10
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Skill
+            - Cost: 1
+            - Enemy loses 2 Strength. Exhaust.
+
+            - **Card 10:**
+            - Type: Skill
+            - Cost: 1
+            - Create a copy of an Attack or Power card in your hand.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - The enemy loses 2 Strength and the card is Exhausted.
+
+            - **Playing Card 10 Next:**
+            - Create a copy of an existing Attack or Power.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - There is no inherent {SYNERGY_KEYWORD} between these two actions. The effects do not interact, showing no bonuses or unique factors brought into play.
+
+            ### Conclusion:
+            No additional interaction comes from playing Card 7 followed by Card 10.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 11
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Skill
+            - Cost: 1
+            - Enemy loses 2 Strength. Exhaust.
+
+            - **Card 11:**
+            - Type: Skill
+            - Cost: 1
+            - This turn, your next Attack is played twice.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - The enemy loses 2 Strength and is Exhausted.
+
+            - **Playing Card 11 Next:**
+            - The next Attack is played twice.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - No direct benefits or amplifications come from the interplay since the lowered strength of the enemy does not impact the damage done by the player.
+
+            ### Conclusion:
+            There is not a direct {SYNERGY_KEYWORD} to note.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 12
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Skill
+            - Cost: 1
+            - Enemy loses 2 Strength. Exhaust.
+
+            - **Card 12:**
+            - Type: Power
+            - Cost: 1
+            - Whenever a card is Exhausted, gain 3 Block.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - The enemy loses 2 Strength followed by card Exhaustion.
+
+            - **Playing Card 12 Next:**
+            - Provides Block whenever an Exhausted card occurs.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Upon playing Card 7, it gets Exhasted, but because of the order of play, you do not trigger the gain of 3 Block from Card 12 as a result of card exhaustion in that scenario.
+
+            ### Conclusion:
+            This creates a no {SYNERGY_KEYWORD}.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 13
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 8 damage to ALL enemies.
+
+            - **Card 9:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 5 damage. If the enemy is Vulnerable, gain 1 energy and draw 1 card.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - You deal 8 damage to all enemies.
+
+            - **Playing Card 9 Next:**
+            - Card 9 will deal 5 damage, with no effect if enemies have not been made vulnerable yet by Card 8.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - While Card 8 deals AoE damage to all enemies, Card 9's conditional effect to gain an energy and draw a card is not applicable unless an enemy is actually Vulnerable. This sequence fails to provide {SYNERGY_KEYWORD}.
+
+            ### Conclusion:
+            In this instance, there is no relevant {SYNERGY_KEYWORD} effect created by this sequence.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 14
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 8 damage to ALL enemies.
+
+            - **Card 10:**
+            - Type: Skill
+            - Cost: 1
+            - Create a copy of an Attack or Power card in your hand.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - You deal 8 damage to all enemies.
+
+            - **Playing Card 10 Next:**
+            - You create a copy of another Attack or Power.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Card 10 allows you to create a copy of Cards you already have. There’s nothing to improve via the sequence from playing Card 8, unless the copy created fits the criteria of being a beneficial attack.
+
+            ### Conclusion:
+            While nothing particularly noteworthy comes from this set order of cards, no enhancements directly connect this {SYNERGY_KEYWORD} either.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 15
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 8 damage to ALL enemies.
+
+            - **Card 11:**
+            - Type: Skill
+            - Cost: 1
+            - This turn, your next Attack is played twice.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - Deal 8 damage to all enemies.
+
+            - **Playing Card 11 Next:**
+            - The next Attack gets played twice.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Card 8 is played followed by Card 11, where you do not end up repeating the damage output from Card 8.
+
+            ### Conclusion:
+            The unfortunate ordering here causes no {SYNERGY_KEYWORD} to arrise.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 16
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 8 damage to ALL enemies.
+
+            - **Card 12:**
+            - Type: Power
+            - Cost: 1
+            - Whenever a card is Exhausted, gain 3 Block.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - Deal 8 damage to all enemies.
+
+            - **Playing Card 12 Next:**
+            - Established block gain condition based on Exhaustion.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - There's no interaction between the two cards' respective effects, rendering the sequence lacking any particular advantages.
+
+            ### Conclusion:
+            No decisive results or special advantages derive from the interplay here.
+
+            Final score:
+            0""")
+    },
+        # 24, 17, 70, 40; 68, 1, 17, 62; 5
+    {
+        "X_indices": [24, 17, 70, 40],
+        "Y_indices": [68, 1, 17, 62],
+        "BundledAnswer": TextUtil.dedent(f"""# Case 1
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Attack
+            - Cost: 4
+            - Costs 1 less energy for each time you lose HP in combat. Deal 18 damage.
+
+            - **Card 9:**
+            - Type: Attack
+            - Cost: 2
+            - Exhaust all cards in your hand. Deal 7 damage for each Exhausted card. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You deal 18 damage, potentially with a reduced cost based on previous HP loss.
+
+            - **Playing Card 9 Next:**
+            - Assuming you have played no other cards nor have any left (after playing Card 5), you will exhaust no cards, since card 5 was played.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - There’s no {SYNERGY_KEYWORD} here since you’re playing Card 5 and then cannot exhaust it with Card 9 for extra damage.
+
+            ### Conclusion:
+            The sequence yields no extra damage output distinct from playing each card independently.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 2
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Attack
+            - Cost: 4
+            - Costs 1 less energy for each time you lose HP in combat. Deal 18 damage.
+
+            - **Card 10:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 5 Block.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You deal 18 damage.
+
+            - **Playing Card 10 Next:**
+            - You gain 5 Block.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - There is no direct interaction or {SYNERGY_KEYWORD} from playing them in this order. The Block gained doesn’t amplify or minimize the impact of damage dealt by Card 5.
+
+            ### Conclusion:
+            No additional advantages or disadvantages come from this sequence.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 3
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Attack
+            - Cost: 4
+            - Costs 1 less energy for each time you lose HP in combat. Deal 18 damage.
+
+            - **Card 6:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 3 damage to a random enemy 3 times.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You deal 18 damage.
+
+            - **Playing Card 6 Next:**
+            - You deal 9 damage total (3 damage to a random enemy 3 times).
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The damage from Card 6 does not enhance or affect the outcome of Card 5. These are two independent attacks without any interplay beyond their individual outputs.
+
+            ### Conclusion:
+            There is no effective {SYNERGY_KEYWORD} created in this sequence.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 4
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Attack
+            - Cost: 4
+            - Costs 1 less energy for each time you lose HP in combat. Deal 18 damage.
+
+            - **Card 11:**
+            - Type: Power
+            - Cost: 0
+            - At the start of your turn, lose 1 HP and draw 1 card.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You deal 18 damage.
+
+            - **Playing Card 11 Next:**
+            - This sets up an ongoing effect to draw cards and lose HP.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - There’s no substantive interplay here. The damage dealt does not affect Card 11 directly, and since Card 5 is played first, Card 11's effect does not change it.
+
+            ### Conclusion:
+            Such sequence offers no beneficial or detrimental {SYNERGY_KEYWORD} effect.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 5
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 3 damage to a random enemy 3 times.
+
+            - **Card 9:**
+            - Type: Attack
+            - Cost: 2
+            - Exhaust all cards in your hand. Deal 7 damage for each Exhausted card. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You deal 9 damage total (3 damage to a random enemy, 3 times).
+
+            - **Playing Card 9 Next:**
+            - You then exhaust all remaining cards and you deal an additional 7 damage for each card exhausted.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - While there’s a reasonable independent benefit from playing both, neither attack card augments the result of the other directly.
+
+            ### Conclusion:
+            No significant {SYNERGY_KEYWORD} occurs due to the independent nature of the two cards.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 6
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 3 damage to a random enemy 3 times.
+
+            - **Card 10:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 5 Block.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You deal 9 damage total.
+
+            - **Playing Card 10 Next:**
+            - You gain 5 Block.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - There’s no synergistic benefit or interaction between these two cards; each offers a separate benefit without affecting the other's outcome.
+
+            ### Conclusion:
+            No {SYNERGY_KEYWORD} effect arises in this sequence.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 7
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 3 damage to a random enemy 3 times.
+
+            - **Card 6 (again):**
+            - Type: Attack
+            - Cost: 1
+            - Deal 3 damage to a random enemy 3 times.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You deal 9 damage total.
+
+            - **Playing Second Card 6 Next:**
+            - You now deal another 9 damage (again, 3 damage to random enemies).
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - In this case, each instance of playing Card 6 is stackable, yet remains independent without any alteration to the play interaction from the first play.   
+
+            ### Conclusion:
+            This demonstrates no {SYNERGY_KEYWORD} effect in terms of damage, since they are the same card without additional amplifying effects, this does just showcase independent outputs.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 8
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 3 damage to a random enemy 3 times.
+
+            - **Card 11:**
+            - Type: Power
+            - Cost: 0
+            - At the start of your turn, lose 1 HP and draw 1 card.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You deal 9 damage total.
+
+            - **Playing Card 11 Next:**
+            - The ongoing action begins to lose HP and draw cards at the start of your next turn.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The damage done does not enhance or influence the effects of Card 11, as the effects remain separate.
+
+            ### Conclusion:
+            No distinct {SYNERGY_KEYWORD} occurs from this combination.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 9
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Skill
+            - Cost: 2
+            - Gain 30 Block. Exhaust.
+
+            - **Card 9:**
+            - Type: Attack
+            - Cost: 2
+            - Exhaust all cards in your hand. Deal 7 damage for each Exhausted card. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - You gain 30 Block.
+
+            - **Playing Card 9 Next:**
+            - You then exhaust all remaining cards and you deal an additional 7 damage for each card exhausted.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The combined play adds no value due to Card 7 not adding to Card 9’s effect, as you gain significant Block and then have exhaustion triggering for damage seperately.        
+
+            ### Conclusion:
+            The lack {SYNERGY_KEYWORD} here offers a neutral result from this play combination.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 10
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Skill
+            - Cost: 2
+            - Gain 30 Block. Exhaust.
+
+            - **Card 10:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 5 Block.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - You gain 30 Block.
+
+            - **Playing Card 10 Next:**
+            - You gain another 5 Block.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - There’s no effect seen when playing these two cards in succession. What happens is merely independent Block gain without any added effect related to each card's interactions.
+
+            ### Conclusion:
+            No real synergistic benefit emerges from these plays.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 11
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Skill
+            - Cost: 2
+            - Gain 30 Block. Exhaust.
+
+            - **Card 6:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 3 damage to a random enemy 3 times.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - You gain 30 Block.
+
+            - **Playing Card 6 Next:**
+            - You deal 9 damage total.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The use of Card 7 doesn't interact with or modify the effect of Card 6, as both serve individual purposes with no amplification of effects.
+
+            ### Conclusion:
+            No interaction of {SYNERGY_KEYWORD} is present here.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 12
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Skill
+            - Cost: 2
+            - Gain 30 Block. Exhaust.
+
+            - **Card 11:**
+            - Type: Power
+            - Cost: 0
+            - At the start of your turn, lose 1 HP and draw 1 card.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - You gain 30 Block.
+
+            - **Playing Card 11 Next:**
+            - You initiate the ongoing effect of losing HP and being able to draw a card.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The effects from the first card don't influence or build upon the second card's ongoing ability. Each acts independently without yielding enhanced effects.
+
+            ### Conclusion:
+            There is no {SYNERGY_KEYWORD} effect in this order.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 13
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Skill
+            - Cost: 1
+            - Add a random Attack to your hand. It costs 0 this turn. Exhaust.
+
+            - **Card 9:**
+            - Type: Attack
+            - Cost: 2
+            - Exhaust all cards in your hand. Deal 7 damage for each Exhausted card. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - You add a random Attack to your hand that costs 0 this turn.
+
+            - **Playing Card 9 Next:**
+            - Upon using Card 9, you exhaust the random Attack obtained from Card 8.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Card 9 exploits the effect of exhausting to gain damage, however since Card 8 does not add to the number of exhaustable cards, they do not interact.
+
+            ### Conclusion:
+            This scenario yields no {SYNERGY_KEYWORD} because card 8 does not net extra damage or effects for card 9.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 14
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Skill
+            - Cost: 1
+            - Add a random Attack to your hand. It costs 0 this turn. Exhaust.
+
+            - **Card 10:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 5 Block.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - Gain a random Attack to your hand, at 0 cost.
+
+            - **Playing Card 10 Next:**
+            - You gain 5 Block.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Card 10 creates an additive Block effect independent from whatever Attack was obtained through Card 8. No interaction emerges with significant effects connecting these two cards.
+
+            ### Conclusion:
+            No notable {SYNERGY_KEYWORD} is observed from the order of plays.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 15
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Skill
+            - Cost: 1
+            - Add a random Attack to your hand. It costs 0 this turn. Exhaust.
+
+            - **Card 6:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 3 damage to a random enemy 3 times.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - You add a random Attack to your hand costing 0 this turn.
+
+            - **Playing Card 6 Next:**
+            - You deal 9 damage total.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - There’s no direct {SYNERGY_KEYWORD} generated between these two cards; both actions do their individual roles without affecting the other actions taken.
+
+            ### Conclusion:
+            No {SYNERGY_KEYWORD} interaction exists here.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 16
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Skill
+            - Cost: 1
+            - Add a random Attack to your hand. It costs 0 this turn. Exhaust.
+
+            - **Card 11:**
+            - Type: Power
+            - Cost: 0
+            - At the start of your turn, lose 1 HP and draw 1 card.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - You add a random Attack that costs 0 this turn.
+
+            - **Playing Card 11 Next:**
+            - At the next turn, you will lose 1 HP while drawing another card.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - While the benefits acquired from either card don’t intertwine for this sequence,
+            their individual effects operate independently, making it a standalone play for each.
+
+            ### Conclusion: 
+            No {SYNERGY_KEYWORD} is found in this sequence and as such holds no unique {SYNERGY_KEYWORD}.
+
+            Final score:
+            0""")
+    },
+        # 52, 60, 39, 62; 25, 29, 73, 62; 5
+    {
+        "X_indices": [52, 60, 39, 62],
+        "Y_indices": [25, 29, 73, 62],
+        "BundledAnswer": TextUtil.dedent(f"""# Case 1
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 2 energy. Exhaust.
+
+            - **Card 9:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 3 HP. Gain 2 energy.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You gain 2 energy and then the card is Exhausted.
+
+            - **Playing Card 9 Next:**
+            - You lose 3 HP and gain 2 energy.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - You essentially regain the energy spent from Card 5 and lose additional health through playing Card 9, but exhausting Card 5 does not directly amplify Card 9's effect.
+
+            ### Conclusion:
+            No unique {SYNERGY_KEYWORD} presents itself from this sequence, but you have overall 2 extra energy for the cost of 3 HP.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 2
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 2 energy. Exhaust.
+
+            - **Card 10:**
+            - Type: Power
+            - Cost: 2
+            - Whenever a card is Exhausted, draw 1 card.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You gain 2 energy and then the card is Exhausted.
+
+            - **Playing Card 10 Next:**
+            - This card is not played yet, so no cards have been Exhausted when you play it.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - There’s no {SYNERGY_KEYWORD} since Card 10 does not trigger any action from the first card being exhausted before it is played.
+
+            ### Conclusion:
+            No special advantages generated in this sequence.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 3
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 2 energy. Exhaust.
+
+            - **Card 11:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 6 HP. Gain 2 energy. Draw 3 cards. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You gain 2 energy and then the card is Exhausted.
+
+            - **Playing Card 11 Next:**
+            - You lose 6 HP, gain 2 energy, and draw 3 cards while exhausting Card 11.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The effect of Card 11 is independent; However, the energy from Card 5 allows for additional card play from Card 10's draws.
+
+            ### Conclusion:
+            A {SYNERGY_KEYWORD} effect exists; the played cards just act independently.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 4
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 2 energy. Exhaust.
+
+            - **Card 8:**
+            - Type: Power
+            - Cost: 0
+            - At the start of your turn, lose 1 HP and draw 1 card.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You gain 2 energy. The card is then Exhausted.
+
+            - **Playing Card 8 Next:**
+            - You do not gain any effects at the moment but do set up an ongoing effect.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Card 8 provides future benefits but not upon its current iteration. Therefore, playing Card 5 generates energy but does not directly influence Card 8's activation.
+
+            ### Conclusion:
+            No {SYNERGY_KEYWORD} or notable interaction occurs here.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 5
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Power
+            - Cost: 0
+            - Gain 2 Vulnerable. At the start of your turn, gain 1 energy.
+
+            - **Card 9:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 3 HP. Gain 2 energy.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You gain 2 Vulnerable and the possibility to gain 1 energy in the next turn.
+
+            - **Playing Card 9 Next:**
+            - You lose 3 HP and gain 2 energy.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The damage effect of Vulnerable does not play into the mechanics of Card 9; thus, both cards operate independently here.
+
+            ### Conclusion:
+            No {SYNERGY_KEYWORD} effect is observable in this combination.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 6
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Power
+            - Cost: 0
+            - Gain 2 Vulnerable. At the start of your turn, gain 1 energy.
+
+            - **Card 10:**
+            - Type: Power
+            - Cost: 2
+            - Whenever a card is Exhausted, draw 1 card.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You gain 2 Vulnerable.
+
+            - **Playing Card 10 Next:**
+            - This card does not activate yet or draw any cards at this point.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The two cards do not interact at all; thus, they are independent of each other, with no benefit derived from the sequence.
+
+            ### Conclusion:
+            No advantageous {SYNERGY_KEYWORD} effect occurs with these two.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 7
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Power
+            - Cost: 0
+            - Gain 2 Vulnerable. At the start of your turn, gain 1 energy.
+
+            - **Card 11:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 6 HP. Gain 2 energy. Draw 3 cards. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You gain 2 Vulnerable.
+
+            - **Playing Card 11 Next:**
+            - You could potentially gain 2 energy, draw 3 cards, and exhaust Card 11, but none of these actions will amplify the effect of Card 6.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - There’s a small benificial effect between the two cards when combined, since Card 6 lets you play more cards drawn from Card 11.
+
+            ### Conclusion:
+            A {SYNERGY_KEYWORD} emerges as more options become available.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 8
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Power
+            - Cost: 0
+            - Gain 2 Vulnerable. At the start of your turn, gain 1 energy.
+
+            - **Card 8:**
+            - Type: Power
+            - Cost: 0
+            - At the start of your turn, lose 1 HP and draw 1 card.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You gain 2 Vulnerable.
+
+            - **Playing Card 8 Next:**
+            - This establishes your future turns for a draw.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Just like in previous sequences, the gains with each do not present any enhanced interaction; they merely act independently.
+
+            ### Conclusion:
+            No bonus or {SYNERGY_KEYWORD} occurs through this sequence as well.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 9
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Skill
+            - Cost: 1
+            - Lose 2 HP. Deal 15 damage.
+
+            - **Card 9:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 3 HP. Gain 2 energy.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - You lose 2 HP to deal 15 damage.
+
+            - **Playing Card 9 Next:**
+            - You lose 3 HP and gain 2 energy.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The damage from Card 7 does not benefit from or amplify the energy gain provided by Card 9; they remain separate experiences.
+
+            ### Conclusion:
+            No additional advantages are seen here.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 10
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Skill
+            - Cost: 1
+            - Lose 2 HP. Deal 15 damage.
+
+            - **Card 10:**
+            - Type: Power
+            - Cost: 2
+            - Whenever a card is Exhausted, draw 1 card.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - You lose 2 HP to deal 15 damage.
+
+            - **Playing Card 10 Next:**
+            - Card 10 does not get to influence Card 7 since none is exhausted directly leading to its effects.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - There’s no interaction between the two where one enhances the effect of the other; they function separately.
+
+            ### Conclusion:
+            No {SYNERGY_KEYWORD} evolves from this play.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 11
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Skill
+            - Cost: 1
+            - Lose 2 HP. Deal 15 damage.
+
+            - **Card 11:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 6 HP. Gain 2 energy. Draw 3 cards. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - You lose 2 HP to deal 15 damage.
+
+            - **Playing Card 11 Next:**
+            - You lose 6 HP, gain 2 energy, draw 3 cards, and exhaust the card.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The damage dealt from Card 7 does not alter the lost health interactions provided by Card 11. This remains a standalone interaction.
+
+            ### Conclusion:
+            As previously seen, no element of {SYNERGY_KEYWORD} occurs in this case.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 12
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Skill
+            - Cost: 1
+            - Lose 2 HP. Deal 15 damage.
+
+            - **Card 8:**
+            - Type: Power
+            - Cost: 0
+            - At the start of your turn, lose 1 HP and draw 1 card.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - You lose 2 HP to deal 15 damage.
+
+            - **Playing Card 8 Next:**
+            - You gain the future ability to lose HP and draw a card but not gain any benefit immediately.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - There are no overlaps or enhancements in effect through this interaction.
+
+            ### Conclusion:
+            The cards only function on their independent basis.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 13
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Power
+            - Cost: 0
+            - At the start of your turn, lose 1 HP and draw 1 card.
+
+            - **Card 9:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 3 HP. Gain 2 energy.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - You set up the second turn to lose 1 HP and draw a card but gain nothing yet from this iteration.
+
+            - **Playing Card 9 Next:**
+            - You lose 3 HP and gain 2 energy.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The interaction from the second card does not directly improve or affect the outcome of the first card, however, they open more options for the player.
+
+            ### Conclusion:
+            A beneficial {SYNERGY_KEYWORD} effect arises in this sequence.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 14
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Power
+            - Cost: 0
+            - At the start of your turn, lose 1 HP and draw 1 card.
+
+            - **Card 10:**
+            - Type: Power
+            - Cost: 2
+            - Whenever a card is Exhausted, draw 1 card.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - Sets the stage for future turns to lose HP and gain cards.
+
+            - **Playing Card 10 Next:**
+            - Does not gain any effects until Exhausted cards come into play.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The {SYNERGY_KEYWORD} is absent, leading to both being independent of the other.
+
+            ### Conclusion:
+            No additional benefits occur from this sequence.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 15
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Power
+            - Cost: 0
+            - At the start of your turn, lose 1 HP and draw 1 card.
+
+            - **Card 11:**
+            - Type: Skill
+            - Cost: 0
+            - Lose 6 HP. Gain 2 energy. Draw 3 cards. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - Ongoing effect for future turns is set up by initializing the card.
+
+            - **Playing Card 11 Next:**
+            - Immediately allows for the loss of HP in tandem with draw, alongside gaining substantial energy.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Because Card 11 gains energy, Card 8's additional draw is benificial.
+
+            ### Conclusion:
+            There’s a small {SYNERGY_KEYWORD} between cards in this situation.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 16
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Power
+            - Cost: 0
+            - At the start of your turn, lose 1 HP and draw 1 card.
+
+            - **Card 8 (again):**
+            - Type: Power
+            - Cost: 0
+            - At the start of your turn, lose 1 HP and draw 1 card.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - You set up effects that will emerge each turn.
+
+            - **Playing Second Card 8 Next:**
+            - Similar to the first one, this card also stacks the ongoing functionality without any unique interaction with either.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - No new synergistic effects occur as both actions are redundant. They merely grant similar continuous actions.
+
+            ### Conclusion:
+            No advantages or shifts in effects are present in this case.
+
+            Final score:
+            0""")
+    },
+
 ]
 
 def dump_json(example_chat, outfile):
