@@ -1,36 +1,13 @@
 from utility import TextUtil
-from sts_prompts import SYNERGY_KEYWORD, SYNERGY_KEYWORD_CAPITALIZED, SYNERGY_KEYWORD_PLURAL, SYNERGY_KEYWORD_VERB
+from sts_prompts import SYNERGY_KEYWORD, SYNERGY_KEYWORD_CAPITALIZED,\
+    SYNERGY_KEYWORD_PLURAL, SYNERGY_KEYWORD_VERB
 
 examples = [
     #34, 17, 62, 6; 68, 65, 44, 6
     {
-        "Question": TextUtil.dedent(f"""Let's say we have:
-        Cards:
-        Card 5 (Power Type) - Cost 1: "Whenever you draw a Status card, draw 1 card."
-        Card 6 (Attack Type) - Cost 1: "Deal 3 damage to a random enemy 3 times."
-        Card 7 (Power Type) - Cost 0: "At the start of your turn, lose 1 HP and draw 1 card."
-        Card 8 (Attack Type) - Cost 0: "Can only be played if every card in your hand is an Attack. Deal 14 damage."
-        Card 9 (Attack Type) - Cost 2: "Exhaust all cards in your hand. Deal 7 damage for each Exhausted card. Exhaust."      
-        Card 10 (Skill Type) - Cost 1: "This turn, your next Attack is played twice."
-        Card 11 (Skill Type) - Cost 1: "Add 2 Wounds to your hand. Gain 15 Block."
-        Cases:
-        1. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 9?
-        2. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 10?
-        3. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 8?
-        4. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 11?
-        5. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 9?
-        6. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 10?
-        7. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 8?
-        8. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 11?
-        9. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 9?
-        10. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 10?
-        11. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 8?
-        12. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 11?
-        13. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 9?
-        14. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 10?
-        15. What is the {SYNERGY_KEYWORD} effect of playing card 8, then another one of card 8 again?
-        16. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 11?"""),
-        "Answer": TextUtil.dedent(
+        "X_indices": [34, 17, 62, 6],
+        "Y_indices": [68, 65, 6, 44],
+        "BundledAnswer": TextUtil.dedent(
             f"""# Case 1
             ### Card Descriptions:
             - **Card 5:**
@@ -367,7 +344,7 @@ examples = [
 
             ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
             - The negative effect of adding Wounds from Card 11 directly hinders the positive effect of drawing an additional card each turn gained from Card 7, since the drawn cards now can be Wounds.
-            - The positive effect of drawing an additional card each turn gained from Card 7 directly counteracts the negative effect of having your deck diluted with Wounds from card 1.
+            - The positive effect of drawing an additional card each turn gained from Card 7 directly counteracts the negative effect of having your deck diluted with Wounds from Card 11.
 
             ### Conclusion:
             Given this {SYNERGY_KEYWORD} has both a positive and negative side and these sides are relatively balanced, we can consider this as having no significant {SYNERGY_KEYWORD}.
@@ -487,34 +464,9 @@ examples = [
     },
     # 4, 38, 44, 59; 5, 33, 43, 59
     {
-        "Question": TextUtil.dedent(f"""Let's say we have:
-        Cards:
-        Card 5 (Skill Type) - Cost 1: "Gain 5 Block. Upgrade a card in your hand for the rest of combat."
-        Card 6 (Skill Type) - Cost 1: "Ethereal. Gain 10 Block."
-        Card 7 (Skill Type) - Cost 1: "Add 2 Wounds to your hand. Gain 15 Block."
-        Card 8 (Power Type) - Cost 3: "Block is not removed at the start of your turn."
-        Card 9 (Attack Type) - Cost 1: "Deal damage equal to your current Block."
-        Card 10 (Skill Type) - Cost 2: "Double your current Block."
-        Card 11 (Power Type) - Cost 1: "At the end of your turn, gain 3 Block."
-        Cases:
-        1. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 9?
-        2. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 10?
-        3. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 11?
-        4. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 8?
-        5. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 9?
-        6. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 10?
-        7. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 11?
-        8. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 8?
-        9. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 9?
-        10. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 10?
-        11. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 11?
-        12. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 8?
-        13. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 9?
-        14. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 10?
-        15. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 11?
-        16. What is the {SYNERGY_KEYWORD} effect of playing card 8, then another one of card 8 again?"""),
-        "Answer": TextUtil.dedent(f"""
-            # Case 1
+        "X_indices": [4, 38, 44, 59],
+        "Y_indices": [5, 33, 43, 59],
+        "BundledAnswer": TextUtil.dedent(f"""# Case 1
             ### Card Descriptions:
             - **Card 5:** 
             - Type: Skill
@@ -871,7 +823,7 @@ examples = [
             - Deals damage equal to the current Block.
 
             ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
-            - It showcases good use of Block retention for damage, as any block gained inbetween makes card 9 stronger because of card 8 being played.
+            - It showcases good use of Block retention for damage, as any block gained inbetween makes Card 9 stronger because of Card 8 being played.
 
             ### Conclusion:
             This results in a positive {SYNERGY_KEYWORD} as the damage can grow a lot.
@@ -950,44 +902,19 @@ examples = [
             - Does nothing since the block is already maintined
 
             ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
-            - While card 8 is a good card in its own right, it has no extra effect when played with another card 8.
+            - While Card 8 is a good card in its own right, it has no extra effect when played with another Card 8.
             
             ### Conclusion:
-            The engagement demonstrates no {SYNERGY_KEYWORD} through playing the second card 8 because the effect cannot compound.
+            The engagement demonstrates no {SYNERGY_KEYWORD} through playing the second Card 8 because the effect cannot compound.
 
             Final score:
             0""")
     },
     #15, 19, 63, 73; 25, 32, 52, 73
     {
-        "Question": TextUtil.dedent(f"""Let's say we have:
-        Cards:
-        Card 5 (Attack Type) - Cost 1: "Deal 9 damage. Draw 1 card."
-        Card 6 (Skill Type) - Cost 1: "Gain 7 Block. Exhaust a random card from your hand."
-        Card 7 (Power Type) - Cost 3: "Skills cost 0. Whenever you play a Skill, Exhaust it."
-        Card 8 (Skill Type) - Cost 0: "Lose 6 HP. Gain 2 energy. Draw 3 cards. Exhaust."
-        Card 9 (Skill Type) - Cost 0: "Lose 3 HP. Gain 2 energy."
-        Card 10 (Skill Type) - Cost 1: "Create a copy of an Attack or Power card in your hand."       
-        Card 11 (Skill Type) - Cost 1: "Gain 2 energy. Exhaust."
-        Cases:
-        1. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 9?
-        2. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 10?
-        3. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 11?
-        4. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 8?
-        5. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 9?
-        6. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 10?
-        7. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 11?
-        8. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 8?
-        9. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 9?
-        10. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 10?
-        11. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 11?
-        12. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 8?
-        13. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 9?
-        14. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 10?
-        15. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 11?
-        16. What is the {SYNERGY_KEYWORD} effect of playing card 8, then another one of card 8 again?"""),
-
-        "Answer": TextUtil.dedent(
+        "X_indices": [15, 19, 63, 73],
+        "Y_indices": [25, 32, 52, 73],
+        "BundledAnswer": TextUtil.dedent(
             f"""# Case 1
             ### Card Descriptions:
             - **Card 5:**
@@ -1009,7 +936,7 @@ examples = [
 
             ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
             - The damage dealt and card draw from Card 5 does not interact with the subsequent effects of Card 9.
-            - There's added {SYNERGY_KEYWORD} between these two cards in their combination — since card 5 gives you more options and card 9 gives more energy to pick from your expanded options.
+            - There's added {SYNERGY_KEYWORD} between these two cards in their combination — since Card 5 gives you more options and Card 9 gives more energy to pick from your expanded options.
 
             ### Conclusion:
             The combination of these two cards produces an advantageous effect.
@@ -1040,7 +967,7 @@ examples = [
             - Card 5 allows for drawing a card that could potentially be used with Card 10, giving you more options of what card to copy.
 
             ### Conclusion:
-            Playing Card 5 first provides a direct advantage of drawing another card to use for the effect of card 10.
+            Playing Card 5 first provides a direct advantage of drawing another card to use for the effect of Card 10.
 
             Final score:
             1
@@ -1066,7 +993,7 @@ examples = [
 
             ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
             - The order does not specifically enhance or reduce effects compared to playing them separately.
-            - Yet as you gain energy from Card 11, as card 5 gives you more options, you can now more cards to play pick from your expanded options
+            - Yet as you gain energy from Card 11, as Card 5 gives you more options, you can now more cards to play pick from your expanded options
 
             ### Conclusion:
             There is no a {SYNERGY_KEYWORD} in the play order between Card 5 and Card 11. The energy gain ehances the draw reaped from Card 5’s play.
@@ -1239,7 +1166,7 @@ examples = [
 
             ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
             - After playing Card 7, it allows you to utilize Card 9 without energy cost, activating the effect while having it exhaust automatically.
-            - The problem is that card 9 already cost 0, meaning that all card 7 did was exhaust card 9.       
+            - The problem is that Card 9 already cost 0, meaning that all Card 7 did was exhaust Card 9.       
 
             ### Conclusion:
             This combination promotes a negative interaction by eliminating the skill card while discounting you no energy.
@@ -1270,7 +1197,7 @@ examples = [
             - While playing Card 10 creates additional cards, the cost reduction from Card 7 allowes you to have more energy in the future for the copied cards.
 
             ### Conclusion:
-            The sequence provides advantages, and despite exhausting card 10, is a net positive {SYNERGY_KEYWORD}.
+            The sequence provides advantages, and despite exhausting Card 10, is a net positive {SYNERGY_KEYWORD}.
 
             Final score:
             1
@@ -1324,11 +1251,11 @@ examples = [
             - You lose 6 HP, gain 2 energy, and draw 3 cards. It then is exhausted.
 
             ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
-            - Using Card 7 before Card 8 does not have any negatives, as card 8 is exhausted on being played regardless.
+            - Using Card 7 before Card 8 does not have any negatives, as Card 8 is exhausted on being played regardless.
             - The ability to play Card 8 without energy charges is pointless since it costs 0 anyway.
 
             ### Conclusion:
-            The sequence leads to effectively no returns, as both the positve and negative effects of card 7 are already present in card 8.
+            The sequence leads to effectively no returns, as both the positve and negative effects of Card 7 are already present in Card 8.
 
             Final score:
             0
@@ -1356,7 +1283,7 @@ examples = [
             - The combination incentivizes energy management and allows you to draw more available cards post the HP loss.
 
             ### Conclusion:
-            Though both cards make you lose HP, the first card provides energy that could be useful in playing cards drawn from card 9, so they end up impacting eachother, causing a {SYNERGY_KEYWORD}.
+            Though both cards make you lose HP, the first card provides energy that could be useful in playing cards drawn from Card 9, so they end up impacting eachother, causing a {SYNERGY_KEYWORD}.
 
             Final score:
             1
@@ -1385,7 +1312,7 @@ examples = [
             - While Card 10 can create beneficial copies, the energy gain offered through the first play does not specifically tie itself into your {SYNERGY_KEYWORD} pathway moving forward.
 
             ### Conclusion:
-            There’s a connection in terms of potentially getting a card to utilize with card 10.
+            There’s a connection in terms of potentially getting a card to utilize with Card 10.
 
             Final score:
             1
@@ -1404,7 +1331,7 @@ examples = [
 
             ### Order of Events
             - **Playing Card 8 First:**
-            - Lose 6 HP, gain 2 energy, draw 3 cards. Exhaust card 8.
+            - Lose 6 HP, gain 2 energy, draw 3 cards. Exhaust Card 8.
 
             - **Playing Card 11 Next:**
             - Gain an additional 2 energy, exhausting Card 11.
@@ -1413,7 +1340,7 @@ examples = [
             - Playing Card 8 already provides the player with 2 energy while drawing 3 cards, and then playing Card 11 allows for an additional energy gain at the cost of exhausting the card.
 
             ### Conclusion:
-            Each of the effects occurs in isolation, yet since card 8 gives you more options and card 11 gives more energy to pick from your expanded options, the have a {SYNERGY_KEYWORD}.
+            Each of the effects occurs in isolation, yet since Card 8 gives you more options and Card 11 gives more energy to pick from your expanded options, the have a {SYNERGY_KEYWORD}.
 
             Final score:
             1
@@ -1442,36 +1369,10 @@ examples = [
             1""")
     },
     # 56, 64, 65, 72; 10, 40, 54, 68
-        {
-        "Question": TextUtil.dedent(f"""Let's say we have:
-        Cards:
-        Card 5 (Skill Type) - Cost 1: "If the enemy intends to attack, gain 4 Strength."
-        Card 6 (Power Type) - Cost 3: "At the start of each turn, gain 2 Strength."
-        Card 7 (Skill Type) - Cost 1: "This turn, your next Attack is played twice."
-        Card 8 (Skill Type) - Cost 1: "Double your Strength. Exhaust."
-        Card 9 (Skill Type) - Cost 1: "Play the top card of your draw pile and Exhaust it."
-        Card 10 (Skill Type) - Cost 1: "Add a random Attack to your hand. It costs 0 this turn. Exhaust."
-        Card 11 (Attack Type) - Cost 2: "Exhaust all non-Attack cards in your hand. Deal 16 damage."
-        Card 12 (Attack Type) - Cost 2: "Exhaust all cards in your hand. Deal 7 damage for each Exhausted card. Exhaust."
-        Cases:
-        1. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 9?
-        2. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 10?
-        3. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 11?
-        4. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 12?
-        5. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 9?
-        6. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 10?
-        7. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 11?
-        8. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 12?
-        9. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 9?
-        10. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 10?
-        11. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 11?
-        12. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 12?
-        13. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 9?
-        14. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 10?
-        15. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 11?
-        16. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 12?"""),
-
-        "Answer": TextUtil.dedent(
+    {
+        "X_indices": [56, 64, 65, 72],
+        "Y_indices": [10, 40, 54, 68],
+        "BundledAnswer": TextUtil.dedent(
             f"""# Case 1
             ### Card Descriptions:
             - **Card 5:**
@@ -1525,7 +1426,7 @@ examples = [
             - Playing Card 10 allows you to play an Attack card that can leverage the 4 Strength buff. Knowing the added card is an attack means it will interact with strength, even if the intensity may differ.
 
             ### Conclusion:
-            Card 10 allows for an enhanced attack by leveraging Card 5's effects since card 10 adds an attack.
+            Card 10 allows for an enhanced attack by leveraging Card 5's effects since Card 10 adds an attack.
 
             Final score:
             1
@@ -1752,7 +1653,7 @@ examples = [
             - If the drawn attack is played as the next action, it can benefit from being played twice.
 
             ### Conclusion:
-            There is positive {SYNERGY_KEYWORD} in getting a doubled random attack since the card 10 garuntees that card 7 can be utilized.
+            There is positive {SYNERGY_KEYWORD} in getting a doubled random attack since the Card 10 garuntees that Card 7 can be utilized.
 
             Final score:
             1
@@ -1926,37 +1827,10 @@ examples = [
             1""")
     },
     # 4, 56, 60, 72; 2, 11, 13, 39
-        {
-        "Question": TextUtil.dedent(f"""Let's say we have:
-        Cards:
-        Card 5 (Skill Type) - Cost 1: "Gain 5 Block. Upgrade a card in your hand for the rest of combat."
-        Card 6 (Skill Type) - Cost 1: "If the enemy intends to attack, gain 4 Strength."
-        Card 7 (Power Type) - Cost 0: "Gain 2 Vulnerable. At the start of your turn, gain 1 energy."
-        Card 8 (Skill Type) - Cost 1: "Double your Strength. Exhaust."
-        Card 9 (Attack Type) - Cost 1: "Deal 6 damage."
-        Card 10 (Attack Type) - Cost 1: "Deal 9 damage. Place a card from your discard pile on top of your draw pile."
-        Card 11 (Attack Type) - Cost 1: "Gain 5 Block. Deal 5 damage."
-        Card 12 (Attack Type) - Cost 1: "Lose 2 HP. Deal 15 damage."
-        Cases:
-        1. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 9?
-        2. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 10?
-        3. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 11?
-        4. What is the {SYNERGY_KEYWORD} effect of playing card 5, then card 12?
-        5. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 9?
-        6. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 10?
-        7. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 11?
-        8. What is the {SYNERGY_KEYWORD} effect of playing card 6, then card 12?
-        9. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 9?
-        10. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 10?
-        11. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 11?
-        12. What is the {SYNERGY_KEYWORD} effect of playing card 7, then card 12?
-        13. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 9?
-        14. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 10?
-        15. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 11?
-        16. What is the {SYNERGY_KEYWORD} effect of playing card 8, then card 12?
-        """),
-
-        "Answer": TextUtil.dedent(
+    {
+        "X_indices": [4, 56, 60, 72],
+        "Y_indices": [2, 11, 13, 39],
+        "BundledAnswer": TextUtil.dedent(
             f"""# Case 1
             ### Card Descriptions:
             - **Card 5:**
@@ -2345,7 +2219,7 @@ examples = [
             - Deal 9 damage and manipulate the draw pile.
 
             ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
-            - Doubling strength occurs preemptively being able to amplify the outcome of card 10.
+            - Doubling strength occurs preemptively being able to amplify the outcome of Card 10.
 
             ### Conclusion:
             There’s {SYNERGY_KEYWORD} as the play of Card 10 is enhanced based upon strength established in advance.
@@ -2404,28 +2278,83 @@ examples = [
             - The damage is increased by any previous strength increases times two since Card 12’s an attack.
 
             ### Conclusion:
-            Ultimately, the {SYNERGY_KEYWORD} emerged as card 12's damage increased.
+            Ultimately, the {SYNERGY_KEYWORD} emerged as Card 12's damage increased.
 
             Final score:
             1""")
     },
 ]
 
+def dump_json(example_chat, outfile):
+    json_requset = example_chat.as_fine_tuning_example()
+    json.dump(json_requset, outfile)
+    outfile.write('\n')
+
+class Counter:
+    def __init__(self, min_count:int, max_count:int|None):
+        assert max_count is None or max_count >= min_count
+        assert max_count is None or max_count >= 0
+        self.min_count = min_count
+        self.max_count = max_count
+        self.counter = 0
+
+    def count(self):
+        self.counter += 1
+    
+    def min_reached(self):
+        return self.counter >= self.min_count
+    
+    def max_reached(self):
+        return self.max_count is not None and self.counter >= self.max_count
+
 if __name__ == "__main__":
     from llm_connector import OpenAIChat
-    from sts_prompts import get_sts_prompts, get_single_card_ask, AskType
+    from sts_prompts import get_sts_prompts, get_single_card_ask,\
+        get_multi_card_bundle_ask, AskType
+    import pandas as pd
     import json
     import time
-
-    system_prompt, prompts, responses, next_card_number = get_sts_prompts(ask_type=AskType.NP_Bundle_Revised)
+    ask_type = AskType.Negative_or_Positive_Revised
+    system_prompt, prompts, responses, next_card_number = get_sts_prompts(ask_type=ask_type)
     chat = OpenAIChat(OpenAIChat.OpenAIModel.GPT_4O_mini, chat_format=False, system_message=system_prompt)
     for prompt, response in zip(prompts, responses):
         chat.inject(prompt, response)
+    df = pd.read_csv("IronClad Card Names.csv")
     output_filename = f"finetune_dataset{int(time.time())}"
     with open(f'{output_filename}.jsonl', 'w') as outfile:
-        for example in examples:
-            example_chat = chat.copy()
-            example_chat.inject(example["Question"], example["Answer"])
-            json_requset = example_chat.as_fine_tuning_example()
-            json.dump(json_requset, outfile)
-            outfile.write('\n')
+        counter = Counter(10, None)
+        while not counter.min_reached():
+            for example in examples:
+                x_indices = example["X_indices"]
+                y_indices = example["Y_indices"]
+                x_cards = [df.iloc[ind] for ind in x_indices]
+                y_cards = [df.iloc[ind] for ind in y_indices]
+                df = pd.read_csv("IronClad Card Names.csv")
+                if ask_type == AskType.NP_Bundle_Revised:
+                    example_chat = chat.copy()
+                    prompt, ids = get_multi_card_bundle_ask(x_cards, y_cards, x_indices, y_indices, next_card_number)
+                    example_chat.inject(prompt, example["BundledAnswer"])
+                    dump_json(example_chat, outfile)
+                    counter.count()
+                elif ask_type == AskType.Negative_or_Positive_Revised:
+                    prompts = []
+                    # TODO find a better way to do this.
+                    # This is dangerous because it assumes the order of questions are always X*Y
+                    for x_card, x_ind in zip(x_cards, x_indices):
+                        for y_card, y_ind in zip(y_cards, y_indices):
+                            prompt, ids = get_single_card_ask(x_card, y_card, x_ind, y_ind, next_card_number)
+                            prompts.append(prompt)
+                    # removes the case number and splits the cases
+                    answers = ['\n'.join(answer.split('\n')[1:]) for answer in example["BundledAnswer"].split("---NEXT---\n")]
+                    for prompt, answer in zip(prompts, answers):
+                        example_chat = chat.copy()
+                        assert 'Case' not in answer
+                        example_chat.inject(prompt, answer)
+                        dump_json(example_chat, outfile)
+                        counter.count()
+                        if counter.max_reached():
+                            break
+                else:
+                    raise Exception("Unknown ask type for creating fine-tuning examples")
+                if counter.max_reached():
+                    break
