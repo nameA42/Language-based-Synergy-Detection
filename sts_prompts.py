@@ -48,43 +48,49 @@ def get_sts_definitions():
     prompts = []
     responses = []
     prompts.append(dedent(
-        """You are studying a new card game. In this game, the player have a deck of cards.
+        """You are studying a new card game. In this game, the player has a deck of cards.
         The game is single player and is played in a number of turns. The game is played against one or more enemies.
-        The player has some amount of HP. If player's HP reaches zero, the player loses.
-        Each of the enemies also have some amount of HP. Any enemy with zero HP dies and would not affect the game anymore. If all the enemies die, the player wins the game.
-        At the start of every turn, each enemy also shows an intention. This intention describes what action that enemy performs after the player ends his turn. Example enemy actions are "deal 5 damage" or "gain 5 block".
-        There are four card piles in the game: draw pile, discard pile, exhaust pile, and your hand. Initially, the player starts the game by shuffling the deck of cards into the draw pile. The other piles are empty.
+        The player has some amount of HP. If the player's HP reaches zero, the player loses.
+        Each of the enemies also has some amount of HP. Any enemy with zero HP dies and does not affect the game anymore. If all the enemies die, the player wins the game.
+        At the start of every turn, each enemy also shows an intention. This intention describes what action that enemy performs after the player ends their turn. Example enemy actions are "deal 5 damage" or "gain 5 block".
+        The game has four card piles: draw pile, discard pile, exhaust pile, and your hand. Initially, the player starts the game by shuffling the deck of cards into the draw pile. The other piles are empty.
         Every turn, these actions are performed in this exact order:
-        1. The player gains some amount of energy. Most of the time this amount is 3, but some items or cards in the game can change this amount.
-        2. The player draws some number of cards from the draw pile into his hand. Most of the time this number is 5, but some items or cards in the game can change this amount.
-        * If there are not enough cards in the draw pile, all the cards in the discard pile shuffle back into the draw pile. Then the remaining cards are drawn.
-        3. The player plays as many cards as he wants, as long as he has enough energy to play them. Then he ends his turn.
-        4. When the player ends his turn, all the remaining cards in his hand are moved to the discard pile. New cards will be drawn next turn.
-        5. When the player ends his turn, the enemies perform their actions that was shown as their intention at the start of the turn.
-        Any questoins so far?\n"""))
+        1. The player gains some amount of energy. This amount is usually 3, but some items or cards in the game can change this amount.
+        2. The player draws some number of cards from the draw pile into their hand. This number is usually 5, but some items or cards in the game can change this amount.
+        * If there are not enough cards in the draw pile, all the cards in the discard pile shuffle back into the draw pile. Then, the remaining cards are drawn.
+        3. The player plays as many cards as they want, as long as they have enough energy to play the cards. Then, they end their turn.
+        4. When the player ends their turn, all the remaining cards in their hand are moved to the discard pile. New cards will be drawn next turn.
+        5. When the player ends their turn, the enemies perform the actions shown as their intention at the start of the turn.
+        Any questions so far?\n"""))
     responses.append(dedent(
         '''No questions so far! The rules of the card game are clear. The mechanics regarding the turn structure, energy management, card drawing, and enemy actions are all well understood.\n'''
     ))
     prompts.append(dedent(
         '''OK, I want to explain some terms from the game before asking questions.
-        Card Type: Either Attack, Skill or Power. Power cards are played and then removed from that battle, but Attack or Skill cards move to discard pile if they are played. We also have Status or Curse cards which are unplayable and most of the time are the cards that disadvantage the player in some way.
-        Block: Until next turn, prevents damage. For example, if the player gains 5 block, and the enemy deals 7 damage to him that turn, the player loses only 2 HP and all their block. It only lasts one turn, so if there are any remining blocks on the enemy or the player, the blocks are removed right before they perform their next set of actions.
-        Vulnerable: Take 50% more damage from Attack damage. Note that this only applies to damage coming from an Attack type card or an enemy Attack action. The number of Vulnerable shows how many turns it will last.
-        Weak: Deal 25% less damage with Attacks. Note that this only applies to damage coming from an Attack type card or an enemy Attack action. The number of Weak shows how many turns it will last.
-        Strength: Adds additional damage to Attacks. Note that this only applies to damage coming from an Attack type card or an enemy Attack action.
-        Exhaust: Remove card until end of combat.
+        Card Type: Attack, Skill, and Power are the three Card Types. Power cards are played and then removed from that battle, but Attack or Skill cards move to the discard pile if they are played. We also have Status or Curse cards, which are unplayable and, most of the time, are the cards that disadvantage the player in some way.
+        Block: Prevents a certain amount of damage until the next turn. For example, if the player gains 5 block, and the enemy deals 7 damage to them that turn, the player loses only 2 HP and all their block. It only lasts one turn, so if there is any remaining block on the enemy or the player, the block is removed right before they perform their next set of actions. Additionally, if a card takes away the player’s HP directly, the block does not prevent the HP loss.
+        Upgrade: When a card is upgraded, its effects are enhanced and it sometimes costs less energy.
+        Vulnerable: The affected target takes 50% more damage from Attack damage. Note that this only applies to damage from an Attack type card or an enemy Attack action. The number of Vulnerable shows how many turns it will last.
+        Weak: The affected target deals 25% less damage with Attacks. Note that this only applies to damage coming from an Attack type card or an enemy Attack action. The number of Weak shows how many turns it will last.
+        Strength: Adds 1 additional damage to Attacks from the affected entity per stack of Strength. Note that this only applies to damage coming from an Attack type card or an enemy Attack action. This also only applies to the Strengthened target. If a target Loses Strength while they have 0 Strength, they gain negative strength, making them deal 1 less damage per Stack. This still has the same restrictions to Attack type cards and enemy Attacks.
+        Exhaust: Remove the affected card until the end of combat.
         Wound: An unplayable card with no effects.
-        Ethereal: If an Ethereal card is in player's hand at the end of turn, it is Exhasted.
-        Dazed: An unplayable card which is also Ethereal.
+        Ethereal: If an Ethereal card is in the player's hand at the end of the turn, it is Exhausted.
+        Dazed: An unplayable card that is also Ethereal.
         Innate: Start each combat with this card in your hand.
-        Burn: An unplayable card. If the card is in player's hand at the end of his turn, the player will take 2 damage.
-        X cost card: If a card's cost is X, it means that when the card is played, it will consume all the avaialble energy the player has. This number of energy consumed is X, and the effect of the card is often described in terms of X.
-        When a card says "At the start of your turn ..." or "At the end of your turn ...", it means this effect will happen every single turn at the start of player's turn or at the end of player's turn.
-        Any questoins so far?\n'''))
+        Burn: An unplayable card. If the card is in the player's hand at the end of their turn, the player will take 2 damage.
+        X cost card: If a card's cost is X, it means that when the card is played, it will consume all the available energy the player has. This number of energy consumed is X, and the effect of the card is often described in terms of X.
+        When a card says "At the start of your turn ..." or "At the end of your turn ...", it means this effect will happen every single turn at the start of the player's turn or at the end of the player's turn.
+        When you play a card, that card is no longer in your hand and will not be affected by "in your hand" effects. It also will not contribute to your current hand size after being played.
+        When you Gain an effect, like Vulnerable or Strength, the effect is applied to the player. When you Apply an effect, the effect is applied to an enemy.
+        Effects are also not applied retroactively. So, if I Gain Strength after dealing Attack damage, the Attack damage does not get amplified by the Strength effect. Additionally, if you play a Power card, its effect is also not triggered from effects before it was played but does trigger from effects afterward.
+        When a random target is picked, the random target changes each time the effect happens.
+        Any questions so far?\n'''))
     responses.append(dedent(
         '''No questions at the moment. I'm ready to give feedback on specific card designs or mechanics you have in mind!\n'''
     ))
     return prompts, responses
+
 
 class AskType(Enum):
         Legacy = -1,
@@ -95,11 +101,11 @@ class AskType(Enum):
 def get_sts_ask(ask_type: AskType):
     if ask_type == AskType.Legacy:
         prompt = dedent(
-            f'''Now, I want you to help me understand card {SYNERGY_KEYWORD} effects.
-            Basically, a {SYNERGY_KEYWORD} effect is when two cards have some additional effect when played together when compared to playing them separately.
-            For example, let's say there is a card A that says "deal 5 damage and apply 1 Vulnerable" and a card B that says "deal 4 damage". If a player plays card A, he deals 5 damage, and if card B is played in a separate scenairo, it applies 4 damage. This is 9 damage in total. But if the player first plays card A and then card B after (in the same turn), card A deals 5 damage and card B deals 6 damage (instead of 4, because the enemy is vulnerable). So, in general the player does 5 + 6 = 11 damage instead of 9. We call this a positive {SYNERGY_KEYWORD}, since this extra effect is advantaging the player.
-            {SYNERGY_KEYWORD_CAPITALIZED} is dependant on the order of cards. For example, if the player plays card B first and then card A, card B does 4 damage, and card A does 5 damage and applies Vulnerable. That Vulnerable effect can be beneficial in combination with other cards played later, but the two cards B and A in this order don't have a {SYNERGY_KEYWORD}.
-            For another example of cards that don't have {SYNERGY_KEYWORD}, let's say card C says "deal 15 damage and gain 1 Weak", and card D says "Gain 5 Block". Card C has it's own effect, dealing damage and applying Weak to the player himself, which can has interesting effects in the game. But, if we played card C and then D, there is no {SYNERGY_KEYWORD}, since there is no additional effect from this combination. Same for if play card D and then C, again there is no extra effect.
+            f'''Now, I want you to help me understand what a card {SYNERGY_KEYWORD} effect is.
+            A {SYNERGY_KEYWORD} effect is when two cards have some additional effect when played together, as opposed to playing them separately.
+            For example, let's say there is a card A that says "deal 5 damage and apply 1 Vulnerable" and a card B that says "deal 4 damage". If a player plays card A, they deals 5 damage, and if card B is played in a separate scenario, it applies 4 damage. This is 9 damage in total. But if the player first plays card A and then card B after (in the same turn), card A deals 5 damage, and card B deals 6 damage (instead of 4, because the enemy is Vulnerable). So, the player does 5 + 6 = 11 damage instead of 9. We call this a positive {SYNERGY_KEYWORD}, since this extra effect benefits the player.
+            {SYNERGY_KEYWORD_CAPITALIZED} can be dependent on the order of cards. For example, if the player plays card B first and then card A, card B does 4 damage, and card A does 5 damage and applies Vulnerable. That Vulnerable effect can be beneficial with other cards played later, but the two cards B and A in this order don't have a {SYNERGY_KEYWORD}.
+            For another example of cards that don't have {SYNERGY_KEYWORD}, let's say card C says, "deal 15 damage and gain 1 Weak", and card D says "Gain 5 Block". Card C has its own effect, dealing damage and applying Weak to the player, which can have interesting effects in the game. But, if we played card C and then D, there is no {SYNERGY_KEYWORD}, since there is no additional effect from this combination. It is the same if we play card D and then C, again there is no extra effect.
             Some cards also have a negative {SYNERGY_KEYWORD}. For example, if you play card C and then card B, card C deals 15 damage, and card B deals 25% less damage (3 instead of 4), so you do 15 + 3 = 18 damage, which is less than if you look at the cards in isolation (15 damage and 4 damage). Note that again, order matters. Playing B first and then C doesn't have any {SYNERGY_KEYWORD}, positive or negative.
             The {SYNERGY_KEYWORD_PLURAL} can be normal, strong, or weak. Weak simulations are when there is a lot of setup or some other situations needed for that {SYNERGY_KEYWORD}, or if the {SYNERGY_KEYWORD} itself is not that strong of an effect.
             Now, given two cards, I want you to first describe their {SYNERGY_KEYWORD}, if any. I want you to think about this effect carefully. Again, some cards might not have a {SYNERGY_KEYWORD} at all. When trying to understand the {SYNERGY_KEYWORD}, we want to think about the effect of the cards, played in the exact given order, either immediately or after waiting some number of turns. Let's also assume that you have enough energy to play them in the same turn if needed, but if you think there are some considerations from one card to another that can be seen as a {SYNERGY_KEYWORD}, I want you to describe it.
@@ -117,22 +123,22 @@ def get_sts_ask(ask_type: AskType):
     elif ask_type in [AskType.Negative_or_Positive, AskType.NP_Bundle, AskType.NP_Bundle_Revised, AskType.Negative_or_Positive_Revised]:
         prompt = dedent(
             f'''Now, I want you to help me understand card {SYNERGY_KEYWORD} effects.
-            A {SYNERGY_KEYWORD} effect is when two cards have some additional effect when played together when compared to playing them separately.
-            Let's say we have two cards, card A and card B. Each card has its own positive and negative effects, and can be strong or weak in different situations.
-            Now, suppose we play card A in some scenario S with some other cards. Suppose we play card B in scenario S with some other cards.
-            Is there a possible scenario S in which playing card A, then card B, would give us additional advantages or disadvantages when compared to the effects of card A in scenario S and card B in scenario S?
-            If in most scenarios, there is an extra advantagous effects of playing the cards together, we call this a positive {SYNERGY_KEYWORD}.
-            If in most cases, there is a disadvantages additional effect when A and then B is played (compared to playing them separately), we call this a negative {SYNERGY_KEYWORD}.
+            A {SYNERGY_KEYWORD} effect is when two cards have some additional effect when played together, as opposed to playing them separately.
+            Let's say we have two cards, card A and card B. Each card has positive and negative effects and can be strong or weak in different situations.
+            Suppose we play card A in some scenario with other cards. Suppose we play card B in a scenario with some other cards.
+            Is there a scenario S in which playing card A, then card B, would give us additional advantages or disadvantages compared to the effects of cards A and B separately?
+            If, in most scenarios, there are some extra advantageous effects of playing the cards together, we call this a positive {SYNERGY_KEYWORD}. A positive {SYNERGY_KEYWORD} can also occur when the effects from card A prevent some of the negative effects of card B or vice versa.
+            If, in most scenarios, there are some additional disadvantageous effects when A and then B are played (compared to playing them separately), we call this a negative {SYNERGY_KEYWORD}. A negative {SYNERGY_KEYWORD} can also occur when the effects from card A prevent some of the positive effects of card B or vice versa.
             Note that:
-            - When we say "play card A, then card B", this can mean playing B immediately after playing A, or after playing other cards in between, or even after passing a few turns in between.
-            - When we talk about {SYNERGY_KEYWORD} between card A and card B, only consider {SYNERGY_KEYWORD} BETWEEN A AND B. For example, if card A has a lot of {SYNERGY_KEYWORD} with other cards, it doesn't matter, because playing card A with other cards would still give us those effects. We want to see what additional effects we get from A and B together.
-            Now, given two cards, I want you to first describe their {SYNERGY_KEYWORD}, if any. I want you to think about this effect carefully. Again, some cards might not have a {SYNERGY_KEYWORD} at all. When trying to understand the {SYNERGY_KEYWORD}, we want to think about the effect of the cards, played in the exact given order, either immediately or after waiting some number of turns or playing some other cards. Let's also assume that you have enough energy to play them in the same turn if needed, but if you think there are some considerations from one card to another that can be seen as a {SYNERGY_KEYWORD}, I want you to describe it.
-            Second, I want you to given this description, tell me if the {SYNERGY_KEYWORD} is positive or negative, or if there is no {SYNERGY_KEYWORD} at all.
-            Finally, I want to give me a final number at the end of your response in a single line.
+            - When we say "play card A, then card B", this can mean playing B immediately after playing A, or after playing extra cards in between, or even after passing a few turns. However, the effects of the extra cards played should not be considered for the {SYNERGY_KEYWORD}.
+            - When we talk about {SYNERGY_KEYWORD} between card A and card B, ONLY CONSIDER {SYNERGY_KEYWORD} BETWEEN A AND B. For example, if card A has a lot of {SYNERGY_KEYWORD} with other cards, it doesn't matter because playing card A with other cards would still give us those effects. We want to see what additional effects we get from A and B TOGETHER.
+            Now, given two cards, I want you to first describe their {SYNERGY_KEYWORD}, if any. I want you to think about this effect very carefully. Again, some cards might not have a {SYNERGY_KEYWORD} at all. When trying to understand the {SYNERGY_KEYWORD}, we want to think about the effect of the cards played in the exact given order, immediately or after waiting some number of turns or playing some extra cards. Let's also assume that you have enough energy to play them in the same turn if needed, but if you think there are some considerations from one card to another that can be seen as a {SYNERGY_KEYWORD}, I want you to describe it thoroughly.
+            Second, given this description, I want you to tell me if the {SYNERGY_KEYWORD} is positive or negative or if there is no {SYNERGY_KEYWORD}.
+            Finally, I want you to give me a final number at the end of your response in a single line.
             0: no {SYNERGY_KEYWORD}
             1: positive {SYNERGY_KEYWORD}
             -1: negative {SYNERGY_KEYWORD}
-            When I give you the card descriptions, I want these exact three things. Make sure to describe each part and to end your response by writing the final number in a single line.
+            When I give you the card descriptions, I want these exact three things. Make sure to describe each part and end your response by writing the final number in a single line.
             Any questions?\n''')
     else:
         raise Exception("Ask Type unrecognised")
