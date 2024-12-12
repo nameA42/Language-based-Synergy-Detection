@@ -3641,6 +3641,908 @@ examples = [
             Final score:
             0""")
     },
+        # 16, 48, 63, 19; 6, 24, 36, 52; 5
+    {
+        "X_indices": [16, 48, 63, 19],
+        "Y_indices": [6, 24, 36, 52],
+        "BundledAnswer": TextUtil.dedent(f"""# Case 1
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 8 Block. Draw 1 card.
+
+            - **Card 9:**
+            - Type: Attack
+            - Cost: 0
+            - Can only be played if every card in your hand is an Attack. Deal 14 damage.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You gain 8 Block and draw a card.
+
+            - **Playing Card 9 Next:**
+            - After drawing a card, you check your hand to see if it only contains Attack cards. If it does, you can deal 14 damage.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - There is a potential negative {SYNERGY_KEYWORD} here. By playing Card 5 first, you are drawing a card which will never help fulfill the requirement for playing Card 9, in case you have not drawn another Attack card.
+            - However, if the drawn card is an Attack card, Card 9 would gain no additional effect.
+
+            ### Conclusion:
+            The effectiveness of Card 9 depends on whether Card 5 allows you to fulfill the condition of having only Attack cards. If it does, you get a total of 14 damage after gaining 8 Block; otherwise, you gain 8 Block and do not attack.
+
+            Final score:
+            -1
+            ---NEXT---
+            # Case 2
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 8 Block. Draw 1 card.
+
+            - **Card 10:**
+            - Type: Attack
+            - Cost: 4
+            - Costs 1 less energy for each time you lose HP in combat. Deal 18 damage.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You gain 8 Block and draw a card.
+
+            - **Playing Card 10 Next:**
+            - You then may play Card 10, paying its cost or the reduced cost based on lost HP, and deal 18 damage.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - There is a small negative {SYNERGY_KEYWORD} between Cards 5 and 10, as both operate independently, and Card 5 makes Card 10 harder to play.
+
+            ### Conclusion:
+            Gaining block here hurts your chances of lossing HP, causing a negative {SYNERGY_KEYWORD}.
+
+            Final score:
+            -1
+            ---NEXT---
+            # Case 3
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 8 Block. Draw 1 card.
+
+            - **Card 11:**
+            - Type: Power
+            - Cost: 1
+            - Whenever you draw a Status or Curse card, deal 6 damage to all enemies.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You gain 8 Block and draw a card.
+
+            - **Playing Card 11 Next:**
+            - If the drawn card is a Status or Curse, then Card 11 activates afterward to deal 6 damage to all enemies.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The cards are played in the wrong order to provide a {SYNERGY_KEYWORD}.
+
+            ### Conclusion:
+            The combination presents no potential benefit due to the ordering of cards.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 4
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 8 Block. Draw 1 card.
+
+            - **Card 12:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 2 energy. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You gain 8 Block and draw a card.
+
+            - **Playing Card 12 Next:**
+            - You gain 2 energy.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The skills operate independent of one another. Card 5 does not influence the energy gain effect in association with Card 12.
+            - However, it does provide new options and energy to play those options.
+
+            ### Conclusion:
+            A small {SYNERGY_KEYWORD} emerges, and you gain more options overall.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 5
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Attack
+            - Cost: 0
+            - Deal 10 damage. Shuffle a Dazed into your draw pile.
+
+            - **Card 9:**
+            - Type: Attack
+            - Cost: 0
+            - Can only be played if every card in your hand is an Attack. Deal 14 damage.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You deal 10 damage and shuffle a Dazed into your draw pile.
+
+            - **Playing Card 9 Next:**
+            - If the conditions are satisfied (no non-Attack cards), you deal 14 damage.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - There is a small interconnection between Cards 6 and 9. The drawn Dazed may negatively impact the ability to play Card 9 next.
+
+            ### Conclusion:
+            A small negative {SYNERGY_KEYWORD} or arises from this arrangement.
+
+            Final score:
+            -1
+            ---NEXT---
+            # Case 6
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Attack
+            - Cost: 0
+            - Deal 10 damage. Shuffle a Dazed into your draw pile.
+
+            - **Card 10:**
+            - Type: Attack
+            - Cost: 4
+            - Costs 1 less energy for each time you lose HP in combat. Deal 18 damage.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You deal 10 damage and shuffle a Dazed into your draw pile.
+
+            - **Playing Card 10 Next:**
+            - You can now pay the card’s cost depending on your HP loss and deal 18 damage.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Card 10 operates independently of Card 6. Losing HP does not assist in creating further advantages between actions.
+
+            ### Conclusion:
+            No enhanced interaction between these two plays.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 7
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Attack
+            - Cost: 0
+            - Deal 10 damage. Shuffle a Dazed into your draw pile.
+
+            - **Card 11:**
+            - Type: Power
+            - Cost: 1
+            - Whenever you draw a Status or Curse card, deal 6 damage to all enemies.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You deal 10 damage and shuffle Dazed.
+
+            - **Playing Card 11 Next:**
+            - The Dazed allows opportunity to enable extra damage.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The added Daze card makes Card 11's effect more likely to happen.
+
+            ### Conclusion:
+            A positive interaction occurs from this combination.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 8
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Attack
+            - Cost: 0
+            - Deal 10 damage. Shuffle a Dazed into your draw pile.
+
+            - **Card 12:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 2 energy. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You deal 10 damage and draw a Dazed.
+
+            - **Playing Card 12 Next:**
+            - You gain 2 energy with no elevated connection to prior card plays.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Each card continues to operate without aiding additional effectiveness through their execution.
+            - However, Card 6 adds the possibility for Card 12 to be drawn in a hand with fewer cards, reducing its effectiveness.
+
+            ### Conclusion:
+            A small negative {SYNERGY_KEYWORD} emerges here.
+
+            Final score:
+            -1
+            ---NEXT---
+            # Case 9
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Power
+            - Cost: 3
+            - Skills cost 0. Whenever you play a Skill, Exhaust it.
+
+            - **Card 9:**
+            - Type: Attack
+            - Cost: 0
+            - Can only be played if every card in your hand is an Attack. Deal 14 damage.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - Skills now cost 0 energy to play and will be exhausted upon use.
+
+            - **Playing Card 9 Next:**
+            - If every card after the use of the Skills is an Attack, it can be played.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Playing Card 7 first allows you to play more skills without cost. This means your ability to play Card 9 becomes higher.
+
+            ### Conclusion:
+            Playing a Power card like Card 7 directly supports Card 9 due to the energy cost reduction and exhaustion of Skills, indicates a positive outcome.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 10
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Power
+            - Cost: 3
+            - Skills cost 0. Whenever you play a Skill, Exhaust it.
+
+            - **Card 10:**
+            - Type: Attack
+            - Cost: 4
+            - Costs 1 less energy for each time you lose HP in combat. Deal 18 damage.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - Skills now cost 0 energy to play and will be exhausted upon use.
+
+            - **Playing Card 10 Next:**
+            - The effect of playing Card 10 remains unchanged.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The effect of Card 7 does not improve or reduce Card 10's performance, since this Attack depends on HP rather than the Skill effect of Card 7.
+
+            ### Conclusion:
+            Therefore, no advantage or disadvantage arises from this interaction creating a neutral setup.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 11
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Power
+            - Cost: 3
+            - Skills cost 0. Whenever you play a Skill, Exhaust it.
+
+            - **Card 11:**
+            - Type: Power
+            - Cost: 1
+            - Whenever you draw a Status or Curse card, deal 6 damage to all enemies.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - Skills now cost 0 and will be exhausted.
+
+            - **Playing Card 11 Next:**
+            - Playing this card does not directly interact with the first card as it depends on drawn Status or Curse cards.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Here, no additional benefits or interactions arise between Cards 7 and 11 through this order.
+
+            ### Conclusion:
+            Thus, there are no advantages or disadvantages, marking this sequence as neutral.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 12
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Power
+            - Cost: 3
+            - Skills cost 0. Whenever you play a Skill, Exhaust it.
+
+            - **Card 12:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 2 energy. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - Skills are played at no cost and will be exhausted.
+
+            - **Playing Card 12 Next:**
+            - This card would be free to play, providing energy and being exhausted.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Card 12 being played while Card 7 is in effect gives an immediate energy boost—however, the exhausting ability that follows does not create {SYNERGY_KEYWORD} with other cards in hand.
+
+            ### Conclusion:
+            The outcome here is advantageous through the energy gain but doesn't create further interactions with respect to both cards specific to the {SYNERGY_KEYWORD} order, thus making it a moderate advantage.        
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 13
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 7 Block. Exhaust a random card from your hand.
+
+            - **Card 9:**
+            - Type: Attack
+            - Cost: 0
+            - Can only be played if every card in your hand is an Attack. Deal 14 damage.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - You gain 7 Block but exhaust a random card from your hand, potentially losing a non-Attack card.
+
+            - **Playing Card 9 Next:**
+            - This depends on whether you still have Attack cards remaining in hand. If you have lost a non-Attack as a consequence of Card 8, then you can play Card 9 easier.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The probability of exhausting a non-Attack card allows for playing Card 9.
+
+            ### Conclusion:
+            As such, this sequence has the potential for a positive {SYNERGY_KEYWORD} because Card 8 helps to play Card 9.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 14
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 7 Block. Exhaust a random card from your hand.
+
+            - **Card 10:**
+            - Type: Attack
+            - Cost: 4
+            - Costs 1 less energy for each time you lose HP in combat. Deal 18 damage.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - You gain 7 Block and exhaust a random card.
+
+            - **Playing Card 10 Next:**
+            - The effectiveness of Card 10 is determined independently from Card 8’s set-up regarding damage or cost reduction.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Given no influence on Card 10, this sequence registers as a neutral {SYNERGY_KEYWORD} as no interplay exists between the two.
+
+            ### Conclusion:
+            Thus, the result is absent of any unique interactions creating a neutral outcome.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 15
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 7 Block. Exhaust a random card from your hand.
+
+            - **Card 11:**
+            - Type: Power
+            - Cost: 1
+            - Whenever you draw a Status or Curse card, deal 6 damage to all enemies.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - You gain 7 Block and exhaust a random card.
+
+            - **Playing Card 11 Next:**
+            - Card 11 effects depend entirely on whether you draw a Status or Curse.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Given no influence on Card 11, this sequence registers as a neutral {SYNERGY_KEYWORD} as no interplay exists between the two.
+
+            ### Conclusion:
+            Thus, the result is absent of any unique interactions creating a neutral outcome.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 16
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 7 Block. Exhaust a random card from your hand.
+
+            - **Card 12:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 2 energy. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - You gain 7 Block and exhaust a random card.
+
+            - **Playing Card 12 Next:**
+            - After exhausting another card, you can gain energy.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The interaction is entirely independent; however, losing your options for Card 12's energy increases the possibility of leftover energy, which does not carry over between turns.
+
+            ### Conclusion:
+            This sequence of plays results in a small negative {SYNERGY_KEYWORD}.
+
+            Final score:
+            -1""")
+    },
+        # 23, 16, 69, 15; 54, 6, 21, 23; 5
+    {
+        "X_indices": [23, 16, 69, 15],
+        "Y_indices": [54, 6, 21, 23],
+        "BundledAnswer": TextUtil.dedent(f"""# Case 1
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Skill
+            - Cost: 0
+            - Draw 3 cards. You cannot draw additional cards this turn.
+
+            - **Card 9:**
+            - Type: Attack
+            - Cost: 2
+            - Exhaust all non-Attack cards in your hand. Deal 16 damage.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You draw 3 cards, expanding your hand.
+
+            - **Playing Card 9 Next:**
+            - When Card 9 is played, you exhaust all non-Attack cards including those drawn from Card 5, assuming some of them were not Attack cards. Regardless, you will deal 16 damage.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Depending on the draw from Card 5, if non-Attack cards were drawn, those cards would be exhausted, but there isn't any beneficial interaction or {SYNERGY_KEYWORD} between the two as no additional value is derived specifically from the order or impacts of Card 5 before Card 9.
+
+            ### Conclusion:
+            This sequence does not yield any notable advantages, meaning the disadvantages shine through. It is classified as having negative {SYNERGY_KEYWORD} effect.
+
+            Final score:
+            -1
+            ---NEXT---
+            # Case 2
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Skill
+            - Cost: 0
+            - Draw 3 cards. You cannot draw additional cards this turn.
+
+            - **Card 10:**
+            - Type: Attack
+            - Cost: 0
+            - Can only be played if every card in your hand is an Attack. Deal 14 damage.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You draw 3 cards.
+
+            - **Playing Card 10 Next:**
+            - Card 10 requires that every card in your hand is an Attack type, which is impossible to fulfill after playing Card 5 unless all cards drawn were Attack cards.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - There is no benefit or validity to play Card 10 after Card 5 since the situation restricts Card 10 entirely by removing the potential of playing it.
+
+            ### Conclusion:
+            Given that Card 10 can't be played after drawing from Card 5, this exhibits negative {SYNERGY_KEYWORD} effects.
+
+            Final score:
+            -1
+            ---NEXT---
+            # Case 3
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Skill
+            - Cost: 0
+            - Draw 3 cards. You cannot draw additional cards this turn.
+
+            - **Card 11:**
+            - Type: Skill
+            - Cost: 0
+            - Draw 1 card. Place a card from your hand on top of your draw pile. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You draw 3 cards.
+
+            - **Playing Card 11 Next:**
+            - You draw no additional card because of Card 5. Then, you place a card from your hand back on top of your draw pile.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The initial card draw from Card 5 is effective, followed by Card 11, which does not get to draw because of Card 5.
+
+            ### Conclusion:
+            Because the effects cut off Card 11's draw, the sequence leads to a negative {SYNERGY_KEYWORD}.
+
+            Final score:
+            -1
+            ---NEXT---
+            # Case 4
+            ### Card Descriptions:
+            - **Card 5:**
+            - Type: Skill
+            - Cost: 0
+            - Draw 3 cards. You cannot draw additional cards this turn.
+
+            ### Order of Events
+            - **Playing Card 5 First:**
+            - You draw 3 cards.
+
+            - **Playing Card 5 Again:**
+            - Card 5 states you cannot draw additional cards this turn, leading to no new draws.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Playing Card 5 first followed again by the same card produces no further advantage and just wastes energy. The limit on drawing more cards leads to ineffective redundancy.
+
+            ### Conclusion:
+            The combination of plays leads to a reduction in effectiveness, a negative {SYNERGY_KEYWORD}.
+
+            Final score:
+            -1
+            ---NEXT---
+            # Case 5
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 8 Block. Draw 1 card.
+
+            - **Card 9:**
+            - Type: Attack
+            - Cost: 2
+            - Exhaust all non-Attack cards in your hand. Deal 16 damage.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - Gain 8 Block and draw 1 card.
+
+            - **Playing Card 9 Next:**
+            - You now exhaust the remaining non-Attack cards in your hand, which could include the card drawn from Card 6.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Playing Card 6 first gives a card draw, and the card drawn can be a non-Attack card. This would then be removed by Card 9.
+
+            ### Conclusion:
+            The Exhaustion leads to a direct negative {SYNERGY_KEYWORD}.
+
+            Final score:
+            -1
+            ---NEXT---
+            # Case 6
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 8 Block. Draw 1 card.
+
+            - **Card 10:**
+            - Type: Attack
+            - Cost: 0
+            - Can only be played if every card in your hand is an Attack. Deal 14 damage.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You gain 8 Block and draw 1 card.
+
+            - **Playing Card 10 Next:**
+            - This card will only work worth if all cards in hand are Attack types; that means unless the card drawn through Card 6 was one, there’s no possibility of utilizing this effectively.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The outcome of Block gained does not project into a beneficial play with Card 10 unless favorable circumstances arise. So the only thing that happens is the drawn cards possibly locking possible damage output.
+
+            ### Conclusion:
+            The play sequence fails to yield a cooperative interaction, hence keeping things disjointed.
+
+            Final score:
+            -1
+            ---NEXT---
+            # Case 7
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 8 Block. Draw 1 card.
+
+            - **Card 11:**
+            - Type: Skill
+            - Cost: 0
+            - Draw 1 card. Place a card from your hand on top of your draw pile. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - You gain 8 Block and draw a card.
+
+            - **Playing Card 11 Next:**
+            - Follow up this action for additional drawing and returning a card to the top of your draw pile.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The opportunity to rotate or maintain dynamic control is effective here, with drawing leading to the ability to recast priority cards. This works well through both skills having an interaction that enriches ongoing plays.
+
+            ### Conclusion:
+            Thus, the sequence generates a positive interplay.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 8
+            ### Card Descriptions:
+            - **Card 6:**
+            - Type: Skill
+            - Cost: 1
+            - Gain 8 Block. Draw 1 card.
+
+            - **Card 5:**
+            - Type: Skill
+            - Cost: 0
+            - Draw 3 cards. You cannot draw additional cards this turn.
+
+            ### Order of Events
+            - **Playing Card 6 First:**
+            - Gain 8 Block and draw 1 card.
+
+            - **Playing Card 5 Next:**
+            - Draw 3 additional cards.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Here, the plays yield a large amount of draw, leading to a sprawling hand but dont enhance each others effects.        
+
+            ### Conclusion:
+            The cards give more draw, but do not enhance each other's effects
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 9
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Attack
+            - Cost: 2
+            - Deal 21 damage to ALL enemies. Add a Burn into your discard pile.
+
+            - **Card 9:**
+            - Type: Attack
+            - Cost: 2
+            - Exhaust all non-Attack cards in your hand. Deal 16 damage.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - You deal 21 damage and add a Burn to the discard pile.
+
+            - **Playing Card 9 Next:**
+            - Subsequently, you exhaust all non-Attack cards and deal additional damage.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The Burn added by Card 7 can affect player strategy but the attacks remain independent of each other. 
+
+            ### Conclusion:
+            While you may be able to exhaust the burn card, it is not significant enough to matter. There is no {SYNERGY_KEYWORD}.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 10
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Attack
+            - Cost: 2
+            - Deal 21 damage to ALL enemies. Add a Burn into your discard pile.
+
+            - **Card 10:**
+            - Type: Attack
+            - Cost: 0
+            - Can only be played if every card in your hand is an Attack. Deal 14 damage.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - Deal 21 damage and incur a Burn from which counts but a correlation shines true in that it does not conditionally affect the play afterwards.
+
+            - **Playing Card 10 Next:**
+            - The likelihood of ability to play card 10 post remains dependent on current card draw. Otherwise, it works outside of a continuous effect.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The ability to now draw the Burn card and lose your ability to play Card 10 makes this interference realistic to expect.
+
+            ### Conclusion:
+            The play outcome fails to bring out positive effects, and leaves behind only negative {SYNERGY_KEYWORD}.
+
+            Final score:
+            -1
+            ---NEXT---
+            # Case 11
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Attack
+            - Cost: 2
+            - Deal 21 damage to ALL enemies. Add a Burn into your discard pile.
+
+            - **Card 11:**
+            - Type: Skill
+            - Cost: 0
+            - Draw 1 card. Place a card from your hand on top of your draw pile. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - The play’s intent manifests damage with Burn provided afterwards.
+
+            - **Playing Card 11 Next:**
+            - You can execute drawing followed with establishing card priority in retreat which follows interaction.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Each card’s effects here play independently. The initial attack allows damage but follows up seamlessly when contrast recall comes into play from any drawn behavior post alignment assessment.    
+
+            ### Conclusion:
+            Despite of outcomes which can deter health overall, no combos or interactions between resultant independence fall out too.
+
+            Final score:
+            0
+            ---NEXT---
+            # Case 12
+            ### Card Descriptions:
+            - **Card 7:**
+            - Type: Attack
+            - Cost: 2
+            - Deal 21 damage to ALL enemies. Add a Burn into your discard pile.
+
+            - **Card 5:**
+            - Type: Skill
+            - Cost: 0
+            - Draw 3 cards. You cannot draw additional cards this turn.
+
+            ### Order of Events
+            - **Playing Card 7 First:**
+            - You apply damage alongside a Burn.
+
+            - **Playing Card 5 Next:**
+            - That is to say, following up allows behavior dependent drawing.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Following up with the draw makes the Burn card more likely to be drawn this turn.
+
+            ### Conclusion:
+            This higher chance of getting the Burn card leads to a negative {SYNERGY_KEYWORD} between card pair.
+
+            Final score:
+            -1
+            ---NEXT---
+            # Case 13
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 9 damage. Draw 1 card.
+
+            - **Card 9:**
+            - Type: Attack
+            - Cost: 2
+            - Exhaust all non-Attack cards in your hand. Deal 16 damage.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - 9 damage and follow up with draw.
+
+            - **Playing Card 9 Next:**
+            - Then proceed to deal an additional 16.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The draw directly increases your odds of Exhausting more cards from Card 9.
+
+            ### Conclusion:
+            This interference leads to a negative {SYNERGY_KEYWORD}.
+
+            Final score:
+            -1
+            ---NEXT---
+            # Case 14
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 9 damage. Draw 1 card.
+
+            - **Card 10:**
+            - Type: Attack
+            - Cost: 0
+            - Can only be played if every card in your hand is an Attack. Deal 14 damage.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - Deal damage again while ensuring simultaneous drawing available.
+
+            - **Playing Card 10 Next:**
+            - Again this requires that all current cards be Attack cards to play effectively.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - The draw directly decreases your odds of being able to play Card 10.
+
+            ### Conclusion:
+            The detrimental effects of drawing before Card 10 makes the sequence harder to achieve.
+
+            Final score:
+            -1
+            ---NEXT---
+            # Case 15
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 9 damage. Draw 1 card.
+
+            - **Card 11:**
+            - Type: Skill
+            - Cost: 0
+            - Draw 1 card. Place a card from your hand on top of your draw pile. Exhaust.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - Playing onto damage occurs followed up by a card draw.
+
+            - **Playing Card 11 Next:**
+            - Evaluate options which come from any replacements seen after card draw is executed.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Because you are able to choose from more cards to add to the top, Card 8 benifits Card 11's effect.
+
+            ### Conclusion:
+            These two cards lead to a benificial {SYNERGY_KEYWORD} as you gain more options for play.
+
+            Final score:
+            1
+            ---NEXT---
+            # Case 16
+            ### Card Descriptions:
+            - **Card 8:**
+            - Type: Attack
+            - Cost: 1
+            - Deal 9 damage. Draw 1 card.
+
+            - **Card 5:**
+            - Type: Skill
+            - Cost: 0
+            - Draw 3 cards. You cannot draw additional cards this turn.
+
+            ### Order of Events
+            - **Playing Card 8 First:**
+            - Initiate damage then assign card draw.
+
+            - **Playing Card 5 Next:**
+            - Follow up drawing additional cards, leading to increased chances of future availability.
+
+            ### Analyzing the {SYNERGY_KEYWORD_CAPITALIZED}:
+            - Although you can draw more cards,there is a major absence in joint effects or benefits.
+
+            ### Conclusion:
+            The interplay yields no complimentary or negative benefits from your action chain.
+
+            Final score:
+            0""")
+    },
 
 ]
 
